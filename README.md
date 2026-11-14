@@ -16,10 +16,10 @@ sudo apt-get install build-essential cmake python3
 make -j4
 make test
 ./buildqueue --demo fcfs
-./buildqueue --serve --port 8080
+./buildqueue --serve --port 8081
 ```
 
-Open **http://127.0.0.1:8080**. No Node.js, npm, CDN, database, or cloud service is needed. Approved headers and MIT license notices are included under `third_party/`. Python is used only by the optional HTTP smoke tests.
+Open **http://127.0.0.1:8081**. No Node.js, npm, CDN, database, or cloud service is needed. Approved headers and MIT license notices are included under `third_party/`. Python is used only by the optional HTTP smoke tests.
 
 On macOS, install Command Line Tools with `xcode-select --install` if needed, then run `make -j4` and `make test` from this directory. CMake is optional; Linux/container verification provides CMake when it is unavailable on the host. Linux was separately verified in Debian ARM64 containers; macOS builds are not presented as Linux verification. Run from the project root so `logs/buildqueue.log` is created there. `--root /absolute/path/to/BuildQueue` overrides the compiled resource path if a binary is moved.
 
@@ -71,7 +71,7 @@ The default experiment has one logical worker, two build slots, 1024 MB of **sim
 ./buildqueue --load demos/fcfs.csv --policy sjf
 ./buildqueue --demo mixed_workload --json
 ./buildqueue --demo synchronization --interactive
-./buildqueue --serve --port 8080
+./buildqueue --serve --port 8081
 ```
 
 The interactive shell supports:
@@ -188,7 +188,7 @@ Observed test results, sanitizer support and verification limits are recorded in
 The independent audit preserved the original 34 tests and all eleven scenarios. It added regressions for tick limits, maximum capacity, malformed identifiers, repeated resets, process timeout/reaping and log-write failures. Read [AUDIT_REPORT](docs/AUDIT_REPORT.md) for changes, evidence and the submission quality gate.
 
 - **Port in use:** stop the previous instance with Ctrl+C or use `./buildqueue --serve --port 8081`, then open `http://127.0.0.1:8081`. The server now rejects a second listener on the same port.
-- **Dashboard missing/disconnected:** run from the project root, check `curl http://127.0.0.1:8080/api/health`, and reload. If assets moved, use `--root /absolute/path/to/BuildQueue`.
+- **Dashboard missing/disconnected:** run from the project root, check `curl http://127.0.0.1:8081/api/health`, and reload. If assets moved, use `--root /absolute/path/to/BuildQueue`.
 - **Cannot resize or change mode:** pause and finish/reset active jobs. Mode/capacity changes need an empty experiment; choose FCFS before entering live mode.
 - **Arrival is in the past:** dashboard defaults and CLI submissions without `--arrival` use the current tick atomically. Editing arrival supplies an explicit schedule; choose the current or a future tick. API clients can opt into `arrival_now:true`.
 - **Persistent log warning:** events remain in memory and resource accounting continues. Restore writable storage and restart to resume on-disk logging; the warning is exposed in `/api/snapshot` and the dashboard.
