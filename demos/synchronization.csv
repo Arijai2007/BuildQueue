@@ -1,0 +1,6 @@
+name,arrival,burst,priority,memory,type
+Worker build A,0,4,1,128,simulated
+Worker build B,0,4,1,128,simulated
+Worker build C,0,4,1,128,simulated
+Worker build D,0,4,1,128,simulated
+Worker build E,1,2,1,64,simulated

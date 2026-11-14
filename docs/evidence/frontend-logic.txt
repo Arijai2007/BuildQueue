@@ -1,0 +1,6 @@
+PASS Mutation gate rejects overlapping actions and recovers
+PASS Job text is escaped for HTML
+PASS Gantt keeps RR slices, idle, historical lanes and scroll
+PASS Memory bar renders actual owners and offsets
+PASS CSV and JSON exports retain actual API comparison metrics
+5/5 frontend logic checks passed; browser layout is a separate check.

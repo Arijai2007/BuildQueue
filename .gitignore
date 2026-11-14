@@ -1,0 +1,9 @@
+buildqueue
+.build*/
+build*/
+logs/*.log
+*.o
+*.d
+.DS_Store
+__pycache__/
+docs/screenshots/

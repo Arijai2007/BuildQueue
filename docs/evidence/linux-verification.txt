@@ -1,0 +1,606 @@
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/BuildQueueEngine.cpp -o .build/BuildQueueEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Api.cpp -o .build/Api.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/CLI.cpp -o .build/CLI.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/HttpServer.cpp -o .build/HttpServer.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/JobManager.cpp -o .build/JobManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Logger.cpp -o .build/Logger.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MemoryManager.cpp -o .build/MemoryManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MonitoringEngine.cpp -o .build/MonitoringEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Scenario.cpp -o .build/Scenario.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulerEngine.cpp -o .build/SchedulerEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulingPolicies.cpp -o .build/SchedulingPolicies.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SyncController.cpp -o .build/SyncController.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/WorkerManager.cpp -o .build/WorkerManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/main.cpp -o .build/main.o
+g++ .build/Api.o .build/BuildQueueEngine.o .build/CLI.o .build/HttpServer.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/main.o -pthread -o buildqueue
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_api.cpp -o .build/test_test_api.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_audit.cpp -o .build/test_test_audit.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_integration.cpp -o .build/test_test_integration.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_main.cpp -o .build/test_test_main.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_memory.cpp -o .build/test_test_memory.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_scheduler.cpp -o .build/test_test_scheduler.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_stress.cpp -o .build/test_test_stress.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_synchronization.cpp -o .build/test_test_synchronization.o
+g++ .build/Api.o .build/BuildQueueEngine.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/test_test_api.o .build/test_test_audit.o .build/test_test_integration.o .build/test_test_main.o .build/test_test_memory.o .build/test_test_scheduler.o .build/test_test_stress.o .build/test_test_synchronization.o -pthread -o .build/buildqueue_tests
+./.build/buildqueue_tests
+PASS REST_validation_and_real_engine_operations
+PASS Audit_exact_tick_budget_finishes_without_false_error
+PASS Audit_documented_maximum_memory_capacity_is_accepted
+PASS Audit_missing_and_malformed_API_identifiers_are_bad_requests
+PASS Audit_arrival_now_is_assigned_atomically_at_submission
+PASS Audit_revisions_track_inputs_without_invalidating_tick_playback
+PASS Audit_repeated_reset_reclaims_resources_and_keeps_unique_IDs
+PASS Audit_process_timeout_is_reported_and_child_is_reaped
+PASS Audit_disk_write_failure_cannot_leak_a_build_slot
+PASS T1_Initialization
+PASS T2_Submission_attributes_and_states
+PASS Invalid_input_atomicity_and_IDs
+PASS Cancellation_rules_and_repeated_cancellation
+PASS Reset_and_safe_resize
+PASS Live_POSIX_process_reaped_and_bounded
+PASS All_demos_complete_and_release_resources
+PASS Resize_preserves_historical_CPU_capacity
+PASS Resource_wait_does_not_become_CPU_wait_while_lanes_are_busy
+PASS T7_Memory_all_policies_fragmented_addresses
+PASS T9_Insufficient_memory_waits_then_resumes
+PASS T10_Resource_release_and_cancel_retained_memory
+PASS Coalescing_double_free_and_ownership
+PASS Observable_fragmentation_demo
+PASS Memory_policy_demos_match_selected_address
+  Expected wait 8/3 = 2.66667; actual 2.6666666666666665 | Expected turnaround 17/3 = 5.66667; actual 5.666666666666667
+PASS T3_FCFS_hand_calculated
+PASS T4_SJF_nonpreemptive
+PASS T5_Priority_and_stable_ties
+PASS T6_RR_boundary_arrivals_and_remaining
+PASS Future_arrivals_and_explicit_idle
+PASS Deterministic_replay_and_conservation
+PASS Policy_switch_preserves_running_job
+PASS Comparison_isolated_identical_inputs
+PASS RR_slice_boundaries_survive_log_clearing
+PASS Concurrent_memory_requests_preserve_partition
+PASS Adversarial_RR_owners_progress_under_memory_pressure
+PASS Process_errors_are_visible_and_resources_release
+PASS State_machine_rejects_invalid_transitions
+PASS Invalid_configuration_is_transactional
+PASS T8_Concurrent_semaphore_and_protected_counter
+PASS Worker_queue_concurrency_and_clean_shutdown
+PASS Resource_contention_and_multiworker_lanes
+PASS Concurrent_snapshots_while_coordinator_runs
+42/42 tests passed
+PASS HTTP 200 /
+PASS Dashboard title is served
+PASS HTTP 200 /css/styles.css
+PASS Asset present /css/styles.css
+PASS HTTP 200 /js/app.js
+PASS Asset present /js/app.js
+PASS HTTP 200 /js/api.js
+PASS Asset present /js/api.js
+PASS HTTP 200 /js/charts.js
+PASS Asset present /js/charts.js
+PASS HTTP 200 /js/components.js
+PASS Asset present /js/components.js
+PASS HTTP 200 /js/exports.js
+PASS Asset present /js/exports.js
+PASS HTTP 200 /assets/favicon.svg
+PASS Asset present /assets/favicon.svg
+PASS HTTP 200 /api/health
+PASS HTTP 200 /api/jobs
+PASS HTTP 200 /api/memory
+PASS HTTP 200 /api/resources
+PASS HTTP 200 /api/stats
+PASS HTTP 200 /api/gantt
+PASS HTTP 200 /api/log
+PASS HTTP 200 /api/config
+PASS HTTP 200 /api/demos
+PASS HTTP 200 /api/snapshot
+PASS HTTP 400 /api/submit
+PASS HTTP 400 /api/submit
+PASS HTTP 400 /api/submit
+PASS HTTP 403 /api/submit
+PASS HTTP 415 /api/submit
+PASS HTTP 400 /api/workers
+PASS HTTP 400 /api/load-demo
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/stats
+PASS Step advances exactly one logical tick
+PASS HTTP 200 /api/snapshot
+PASS HTTP 200 /api/compare
+PASS Comparison runs all four strategies
+PASS HTTP FCFS metrics match fixture
+PASS HTTP 200 /api/snapshot
+PASS Comparison preserves original experiment
+PASS HTTP 200 /api/config
+PASS HTTP 200 /api/run
+PASS HTTP 200 /api/pause
+PASS HTTP 200 /api/stats
+PASS HTTP 200 /api/stats
+PASS Pause freezes logical clock
+PASS HTTP 200 /api/resume
+PASS HTTP 200 /api/stats
+PASS HTTP 200 /api/stats
+PASS Async run and resume finish workload
+PASS HTTP 200 /api/memory
+PASS Completion reclaims memory
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/snapshot
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/snapshot
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/snapshot
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/snapshot
+PASS Fragmentation blocks 400 MB despite 580 MB free
+PASS HTTP 200 /api/load-demo
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/snapshot
+PASS Four workers respect two semaphore slots
+PASS HTTP 200 /api/reset
+PASS HTTP 200 /api/config
+PASS HTTP 201 /api/submit
+PASS HTTP 200 /api/step
+PASS HTTP 200 /api/jobs
+PASS Live process completes through HTTP
+PASS HTTP 200 /api/reset
+PASS HTTP 200 /api/config
+PASS HTTP 201 /api/submit
+PASS HTTP 200 /api/cancel
+PASS HTTP 200 /api/jobs/30
+PASS Cancellation visible through job endpoint
+PASS HTTP 400 /api/cancel
+PASS HTTP 200 /api/memory-policy
+PASS HTTP 200 /api/policy
+PASS HTTP 200 /api/clear-log
+PASS HTTP 200 /api/log
+PASS Log view clearing works
+PASS SIGTERM shuts down server and workers cleanly
+PASS One-shot CLI policy fcfs
+PASS One-shot CLI policy sjf
+PASS One-shot CLI policy priority
+PASS One-shot CLI policy rr
+PASS Interactive CLI status, cancellation error, finish, Gantt and memory
+PASS Malformed one-shot options are rejected
+All end-to-end smoke checks passed.
+PASS Port conflict returns a useful startup error
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS GET jobs/+1: HTTP 400
+PASS jobs/+1: consistent JSON envelope
+PASS GET jobs/-1: HTTP 400
+PASS jobs/-1: consistent JSON envelope
+PASS GET jobs/abc: HTTP 400
+PASS jobs/abc: consistent JSON envelope
+PASS GET jobs/999999999999999999999999: HTTP 400
+PASS jobs/999999999999999999999999: consistent JSON envelope
+PASS POST workers: HTTP 400
+PASS workers: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS GET memory: HTTP 200
+PASS memory: consistent JSON envelope
+PASS Documented maximum capacity is reachable through HTTP
+PASS POST submit: HTTP 415
+PASS submit: consistent JSON envelope
+PASS PUT config: HTTP 405
+PASS config: consistent JSON envelope
+PASS GET not-a-route: HTTP 404
+PASS not-a-route: consistent JSON envelope
+PASS POST submit: HTTP 413
+PASS submit: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST run: HTTP 200
+PASS run: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS FCFS individual waiting times
+PASS FCFS individual turnaround times
+PASS FCFS unrounded average metrics
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS RR preempts after two ticks preserving remaining burst
+PASS RR retains 192 MB reservation and releases slot
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Fragmentation uses actual WAITING reason
+PASS 580 MB free but largest hole only 300 MB
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Four logical workers share two real semaphore permits
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST run: HTTP 200
+PASS run: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS All blocked jobs progress; peak permits 2; atomic counter 18
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS POST compare: HTTP 200
+PASS compare: consistent JSON envelope
+PASS POST compare: HTTP 200
+PASS compare: consistent JSON envelope
+PASS SJF scenario comparisons replay identically
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Comparison leaves original experiment unchanged
+PASS All policies receive the same four input jobs
+PASS Export fcfs avg_wait matches displayed source metric
+PASS Export fcfs avg_turnaround matches displayed source metric
+PASS Export fcfs avg_response matches displayed source metric
+PASS Export fcfs cpu_utilization matches displayed source metric
+PASS Export fcfs throughput matches displayed source metric
+PASS Export fcfs context_switch_like_transitions matches displayed source metric
+PASS Export sjf avg_wait matches displayed source metric
+PASS Export sjf avg_turnaround matches displayed source metric
+PASS Export sjf avg_response matches displayed source metric
+PASS Export sjf cpu_utilization matches displayed source metric
+PASS Export sjf throughput matches displayed source metric
+PASS Export sjf context_switch_like_transitions matches displayed source metric
+PASS Export priority avg_wait matches displayed source metric
+PASS Export priority avg_turnaround matches displayed source metric
+PASS Export priority avg_response matches displayed source metric
+PASS Export priority cpu_utilization matches displayed source metric
+PASS Export priority throughput matches displayed source metric
+PASS Export priority context_switch_like_transitions matches displayed source metric
+PASS Export rr avg_wait matches displayed source metric
+PASS Export rr avg_turnaround matches displayed source metric
+PASS Export rr avg_response matches displayed source metric
+PASS Export rr cpu_utilization matches displayed source metric
+PASS Export rr throughput matches displayed source metric
+PASS Export rr context_switch_like_transitions matches displayed source metric
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS Concurrent HTTP submissions produce 24 unique IDs
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Concurrent snapshots contain coherent job registries
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS Audit server shutdown is clean
+PASS Startup/shutdown cycle 1
+PASS Startup/shutdown cycle 2
+PASS Startup/shutdown cycle 3
+All independent audit checks passed. Evidence: docs/evidence/
+-- The CXX compiler identification is GNU 12.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/bq-cmake
+[  8%] Building CXX object CMakeFiles/buildqueue_core.dir/src/BuildQueueEngine.cpp.o
+[  8%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Api.cpp.o
+[ 12%] Building CXX object CMakeFiles/buildqueue_core.dir/src/JobManager.cpp.o
+[ 16%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Logger.cpp.o
+[ 20%] Building CXX object CMakeFiles/buildqueue_core.dir/src/MemoryManager.cpp.o
+[ 24%] Building CXX object CMakeFiles/buildqueue_core.dir/src/MonitoringEngine.cpp.o
+[ 28%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Scenario.cpp.o
+[ 32%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SchedulerEngine.cpp.o
+[ 36%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SchedulingPolicies.cpp.o
+[ 40%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SyncController.cpp.o
+[ 44%] Building CXX object CMakeFiles/buildqueue_core.dir/src/WorkerManager.cpp.o
+[ 48%] Linking CXX static library libbuildqueue_core.a
+[ 48%] Built target buildqueue_core
+[ 64%] Building CXX object CMakeFiles/buildqueue.dir/src/CLI.cpp.o
+[ 64%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_api.cpp.o
+[ 56%] Building CXX object CMakeFiles/buildqueue.dir/src/main.cpp.o
+[ 64%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_audit.cpp.o
+[ 68%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_integration.cpp.o
+[ 72%] Building CXX object CMakeFiles/buildqueue.dir/src/HttpServer.cpp.o
+[ 76%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_main.cpp.o
+[ 80%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_memory.cpp.o
+[ 84%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_scheduler.cpp.o
+[ 88%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_stress.cpp.o
+[ 92%] Building CXX object CMakeFiles/buildqueue_tests.dir/tests/test_synchronization.cpp.o
+[ 96%] Linking CXX executable buildqueue_tests
+[ 96%] Built target buildqueue_tests
+[100%] Linking CXX executable buildqueue
+[100%] Built target buildqueue
+Internal ctest changing into directory: /tmp/bq-cmake
+Test project /tmp/bq-cmake
+    Start 1: lab_tests
+1/1 Test #1: lab_tests ........................   Passed    3.29 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   3.29 sec
+make BUILD=.build-asan CXXFLAGS='-std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer' LDFLAGS='-pthread -fsanitize=address,undefined' test
+make[1]: Entering directory '/tmp/bq'
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/Api.cpp -o .build-asan/Api.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/BuildQueueEngine.cpp -o .build-asan/BuildQueueEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/JobManager.cpp -o .build-asan/JobManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/Logger.cpp -o .build-asan/Logger.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/MemoryManager.cpp -o .build-asan/MemoryManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/MonitoringEngine.cpp -o .build-asan/MonitoringEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/Scenario.cpp -o .build-asan/Scenario.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/SchedulerEngine.cpp -o .build-asan/SchedulerEngine.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/SchedulingPolicies.cpp -o .build-asan/SchedulingPolicies.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/SyncController.cpp -o .build-asan/SyncController.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c src/WorkerManager.cpp -o .build-asan/WorkerManager.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_api.cpp -o .build-asan/test_test_api.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_audit.cpp -o .build-asan/test_test_audit.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_integration.cpp -o .build-asan/test_test_integration.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_main.cpp -o .build-asan/test_test_main.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_memory.cpp -o .build-asan/test_test_memory.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_scheduler.cpp -o .build-asan/test_test_scheduler.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_stress.cpp -o .build-asan/test_test_stress.o
+g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/tmp/bq"' -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -MMD -MP -c tests/test_synchronization.cpp -o .build-asan/test_test_synchronization.o
+g++ .build-asan/Api.o .build-asan/BuildQueueEngine.o .build-asan/JobManager.o .build-asan/Logger.o .build-asan/MemoryManager.o .build-asan/MonitoringEngine.o .build-asan/Scenario.o .build-asan/SchedulerEngine.o .build-asan/SchedulingPolicies.o .build-asan/SyncController.o .build-asan/WorkerManager.o .build-asan/test_test_api.o .build-asan/test_test_audit.o .build-asan/test_test_integration.o .build-asan/test_test_main.o .build-asan/test_test_memory.o .build-asan/test_test_scheduler.o .build-asan/test_test_stress.o .build-asan/test_test_synchronization.o -pthread -fsanitize=address,undefined -o .build-asan/buildqueue_tests
+./.build-asan/buildqueue_tests
+PASS REST_validation_and_real_engine_operations
+PASS Audit_exact_tick_budget_finishes_without_false_error
+PASS Audit_documented_maximum_memory_capacity_is_accepted
+PASS Audit_missing_and_malformed_API_identifiers_are_bad_requests
+PASS Audit_arrival_now_is_assigned_atomically_at_submission
+PASS Audit_revisions_track_inputs_without_invalidating_tick_playback
+PASS Audit_repeated_reset_reclaims_resources_and_keeps_unique_IDs
+PASS Audit_process_timeout_is_reported_and_child_is_reaped
+PASS Audit_disk_write_failure_cannot_leak_a_build_slot
+PASS T1_Initialization
+PASS T2_Submission_attributes_and_states
+PASS Invalid_input_atomicity_and_IDs
+PASS Cancellation_rules_and_repeated_cancellation
+PASS Reset_and_safe_resize
+PASS Live_POSIX_process_reaped_and_bounded
+PASS All_demos_complete_and_release_resources
+PASS Resize_preserves_historical_CPU_capacity
+PASS Resource_wait_does_not_become_CPU_wait_while_lanes_are_busy
+PASS T7_Memory_all_policies_fragmented_addresses
+PASS T9_Insufficient_memory_waits_then_resumes
+PASS T10_Resource_release_and_cancel_retained_memory
+PASS Coalescing_double_free_and_ownership
+PASS Observable_fragmentation_demo
+PASS Memory_policy_demos_match_selected_address
+  Expected wait 8/3 = 2.66667; actual 2.6666666666666665 | Expected turnaround 17/3 = 5.66667; actual 5.666666666666667
+PASS T3_FCFS_hand_calculated
+PASS T4_SJF_nonpreemptive
+PASS T5_Priority_and_stable_ties
+PASS T6_RR_boundary_arrivals_and_remaining
+PASS Future_arrivals_and_explicit_idle
+PASS Deterministic_replay_and_conservation
+PASS Policy_switch_preserves_running_job
+PASS Comparison_isolated_identical_inputs
+PASS RR_slice_boundaries_survive_log_clearing
+PASS Concurrent_memory_requests_preserve_partition
+PASS Adversarial_RR_owners_progress_under_memory_pressure
+PASS Process_errors_are_visible_and_resources_release
+PASS State_machine_rejects_invalid_transitions
+PASS Invalid_configuration_is_transactional
+PASS T8_Concurrent_semaphore_and_protected_counter
+PASS Worker_queue_concurrency_and_clean_shutdown
+PASS Resource_contention_and_multiworker_lanes
+PASS Concurrent_snapshots_while_coordinator_runs
+42/42 tests passed
+make[1]: Leaving directory '/tmp/bq'

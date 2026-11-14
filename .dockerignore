@@ -1,0 +1,7 @@
+.build*
+build
+build-*
+buildqueue
+.git
+logs/*.log
+docs/screenshots

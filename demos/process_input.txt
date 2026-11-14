@@ -1,0 +1,3 @@
+BuildQueue controlled file-processing fixture.
+Jaypee Institute of Information Technology — Operating Systems Lab — 24B15CS312.
+The live job executes /usr/bin/cksum with this fixed local input, without a shell.

@@ -1,0 +1,5 @@
+policy,avg_wait,avg_turnaround,avg_response,cpu_utilization,throughput,context_switch_like_transitions
+fcfs,7,10.5,7,100,0.2857142857142857,4
+sjf,2.75,6.25,2.75,100,0.2857142857142857,4
+priority,3.75,7.25,3.75,100,0.2857142857142857,4
+rr,5.25,8.75,2.75,100,0.2857142857142857,8

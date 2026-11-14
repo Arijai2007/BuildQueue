@@ -1,0 +1,68 @@
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/BuildQueueEngine.cpp -o .build/BuildQueueEngine.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/CLI.cpp -o .build/CLI.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/HttpServer.cpp -o .build/HttpServer.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Api.cpp -o .build/Api.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/JobManager.cpp -o .build/JobManager.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Logger.cpp -o .build/Logger.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MemoryManager.cpp -o .build/MemoryManager.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MonitoringEngine.cpp -o .build/MonitoringEngine.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Scenario.cpp -o .build/Scenario.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulerEngine.cpp -o .build/SchedulerEngine.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulingPolicies.cpp -o .build/SchedulingPolicies.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SyncController.cpp -o .build/SyncController.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/WorkerManager.cpp -o .build/WorkerManager.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/main.cpp -o .build/main.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_api.cpp -o .build/test_test_api.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_audit.cpp -o .build/test_test_audit.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_integration.cpp -o .build/test_test_integration.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_main.cpp -o .build/test_test_main.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_memory.cpp -o .build/test_test_memory.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_scheduler.cpp -o .build/test_test_scheduler.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_stress.cpp -o .build/test_test_stress.o
+c++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/Users/shivarana/Desktop/BuildQueue"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_synchronization.cpp -o .build/test_test_synchronization.o
+c++ .build/Api.o .build/BuildQueueEngine.o .build/CLI.o .build/HttpServer.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/main.o -pthread -o buildqueue
+c++ .build/Api.o .build/BuildQueueEngine.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/test_test_api.o .build/test_test_audit.o .build/test_test_integration.o .build/test_test_main.o .build/test_test_memory.o .build/test_test_scheduler.o .build/test_test_stress.o .build/test_test_synchronization.o -pthread -o .build/buildqueue_tests
+./.build/buildqueue_tests
+PASS REST_validation_and_real_engine_operations
+PASS Audit_exact_tick_budget_finishes_without_false_error
+PASS Audit_documented_maximum_memory_capacity_is_accepted
+PASS Audit_missing_and_malformed_API_identifiers_are_bad_requests
+PASS Audit_arrival_now_is_assigned_atomically_at_submission
+PASS Audit_revisions_track_inputs_without_invalidating_tick_playback
+PASS Audit_repeated_reset_reclaims_resources_and_keeps_unique_IDs
+PASS Audit_process_timeout_is_reported_and_child_is_reaped
+PASS T1_Initialization
+PASS T2_Submission_attributes_and_states
+PASS Invalid_input_atomicity_and_IDs
+PASS Cancellation_rules_and_repeated_cancellation
+PASS Reset_and_safe_resize
+PASS Live_POSIX_process_reaped_and_bounded
+PASS All_demos_complete_and_release_resources
+PASS Resize_preserves_historical_CPU_capacity
+PASS Resource_wait_does_not_become_CPU_wait_while_lanes_are_busy
+PASS T7_Memory_all_policies_fragmented_addresses
+PASS T9_Insufficient_memory_waits_then_resumes
+PASS T10_Resource_release_and_cancel_retained_memory
+PASS Coalescing_double_free_and_ownership
+PASS Observable_fragmentation_demo
+PASS Memory_policy_demos_match_selected_address
+  Expected wait 8/3 = 2.66667; actual 2.6666666666666665 | Expected turnaround 17/3 = 5.66667; actual 5.666666666666667
+PASS T3_FCFS_hand_calculated
+PASS T4_SJF_nonpreemptive
+PASS T5_Priority_and_stable_ties
+PASS T6_RR_boundary_arrivals_and_remaining
+PASS Future_arrivals_and_explicit_idle
+PASS Deterministic_replay_and_conservation
+PASS Policy_switch_preserves_running_job
+PASS Comparison_isolated_identical_inputs
+PASS RR_slice_boundaries_survive_log_clearing
+PASS Concurrent_memory_requests_preserve_partition
+PASS Adversarial_RR_owners_progress_under_memory_pressure
+PASS Process_errors_are_visible_and_resources_release
+PASS State_machine_rejects_invalid_transitions
+PASS Invalid_configuration_is_transactional
+PASS T8_Concurrent_semaphore_and_protected_counter
+PASS Worker_queue_concurrency_and_clean_shutdown
+PASS Resource_contention_and_multiworker_lanes
+PASS Concurrent_snapshots_while_coordinator_runs
+41/41 tests passed

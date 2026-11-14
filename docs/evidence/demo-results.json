@@ -1,0 +1,2949 @@
+[
+  {
+    "demo": "First things first",
+    "steps": [
+      "load-demo fcfs",
+      "run until complete"
+    ],
+    "expected": "Waits 0/3/5; turnaround 4/6/7; Gantt 0\u20134/4\u20137/7\u20139",
+    "status": "PASS",
+    "stats": {
+      "avg_resource_wait": 0.0,
+      "avg_response": 2.6666666666666665,
+      "avg_turnaround": 5.666666666666667,
+      "avg_wait": 2.6666666666666665,
+      "busy_worker_ticks": 9,
+      "cancelled": 0,
+      "completed": 3,
+      "completed_sample_count": 3,
+      "contention_events": 0,
+      "context_switch_like_transitions": 3,
+      "cpu_utilization": 100.0,
+      "dispatches": 3,
+      "peak_memory": 192,
+      "preemptions": 0,
+      "running": 0,
+      "throughput": 0.3333333333333333,
+      "tick": 9,
+      "total": 3,
+      "waiting": 0,
+      "worker_capacity_ticks": 9
+    },
+    "memory": {
+      "allocated_blocks": 0,
+      "blocks": [
+        {
+          "offset": 0,
+          "owner": 0,
+          "size": 1024
+        }
+      ],
+      "external_fragmentation": 0.0,
+      "free": 1024,
+      "free_blocks": 1,
+      "internal_fragmentation": 0,
+      "largest_free": 1024,
+      "policy": "first",
+      "total": 1024,
+      "used": 0,
+      "utilization": 0.0
+    },
+    "resources": {
+      "active_slots": 0,
+      "available_slots": 2,
+      "peak_slots": 1,
+      "shared_counter": 9,
+      "slots": 2
+    },
+    "jobs": [
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": 4,
+        "first_run": 0,
+        "id": 1,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Compile core",
+        "priority": 3,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "COMPLETED",
+        "turnaround": 4,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 1,
+        "burst": 3,
+        "completion": 7,
+        "first_run": 4,
+        "id": 2,
+        "memory": 192,
+        "memory_offset": -1,
+        "name": "Link application",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 3,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 3,
+        "state": "COMPLETED",
+        "turnaround": 6,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 2,
+        "burst": 2,
+        "completion": 9,
+        "first_run": 7,
+        "id": 3,
+        "memory": 96,
+        "memory_offset": -1,
+        "name": "Run unit tests",
+        "priority": 2,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 5,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 5,
+        "state": "COMPLETED",
+        "turnaround": 7,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      }
+    ],
+    "gantt": [
+      {
+        "dispatch": 1,
+        "end": 1,
+        "job": 1,
+        "start": 0,
+        "worker": 0
+      },
+      {
+        "dispatch": 1,
+        "end": 2,
+        "job": 1,
+        "start": 1,
+        "worker": 0
+      },
+      {
+        "dispatch": 1,
+        "end": 3,
+        "job": 1,
+        "start": 2,
+        "worker": 0
+      },
+      {
+        "dispatch": 1,
+        "end": 4,
+        "job": 1,
+        "start": 3,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 5,
+        "job": 2,
+        "start": 4,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 6,
+        "job": 2,
+        "start": 5,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 7,
+        "job": 2,
+        "start": 6,
+        "worker": 0
+      },
+      {
+        "dispatch": 3,
+        "end": 8,
+        "job": 3,
+        "start": 7,
+        "worker": 0
+      },
+      {
+        "dispatch": 3,
+        "end": 9,
+        "job": 3,
+        "start": 8,
+        "worker": 0
+      }
+    ],
+    "log": [
+      {
+        "job": 0,
+        "message": "Experiment reset. Configuration preserved; job IDs remain unique.",
+        "sequence": 4,
+        "tick": 0,
+        "type": "RESET",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 5,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "Loaded Compile core from fcfs.",
+        "sequence": 6,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 2,
+        "message": "Loaded Link application from fcfs.",
+        "sequence": 7,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 3,
+        "message": "Loaded Run unit tests from fcfs.",
+        "sequence": 8,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "Job 1 joined READY.",
+        "sequence": 9,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 10,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "Reserved 128 MB at offset 0.",
+        "sequence": 11,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "Acquired a shared build slot.",
+        "sequence": 12,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "First execution of job 1.",
+        "sequence": 13,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 1,
+        "message": "Job 1 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 14,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 2,
+        "message": "Job 2 joined READY.",
+        "sequence": 15,
+        "tick": 1,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351591
+      },
+      {
+        "job": 3,
+        "message": "Job 3 joined READY.",
+        "sequence": 16,
+        "tick": 2,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351593
+      },
+      {
+        "job": 1,
+        "message": "Build slot released.",
+        "sequence": 17,
+        "tick": 4,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351595
+      },
+      {
+        "job": 1,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 18,
+        "tick": 4,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351595
+      },
+      {
+        "job": 1,
+        "message": "Job 1 completed at tick 4.",
+        "sequence": 19,
+        "tick": 4,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351595
+      },
+      {
+        "job": 2,
+        "message": "Reserved 192 MB at offset 0.",
+        "sequence": 20,
+        "tick": 4,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351597
+      },
+      {
+        "job": 2,
+        "message": "Acquired a shared build slot.",
+        "sequence": 21,
+        "tick": 4,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351597
+      },
+      {
+        "job": 2,
+        "message": "First execution of job 2.",
+        "sequence": 22,
+        "tick": 4,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351597
+      },
+      {
+        "job": 2,
+        "message": "Job 2 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 23,
+        "tick": 4,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351597
+      },
+      {
+        "job": 2,
+        "message": "Build slot released.",
+        "sequence": 24,
+        "tick": 7,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351599
+      },
+      {
+        "job": 2,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 25,
+        "tick": 7,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351599
+      },
+      {
+        "job": 2,
+        "message": "Job 2 completed at tick 7.",
+        "sequence": 26,
+        "tick": 7,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351599
+      },
+      {
+        "job": 3,
+        "message": "Reserved 96 MB at offset 0.",
+        "sequence": 27,
+        "tick": 7,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351600
+      },
+      {
+        "job": 3,
+        "message": "Acquired a shared build slot.",
+        "sequence": 28,
+        "tick": 7,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351600
+      },
+      {
+        "job": 3,
+        "message": "First execution of job 3.",
+        "sequence": 29,
+        "tick": 7,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351600
+      },
+      {
+        "job": 3,
+        "message": "Job 3 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 30,
+        "tick": 7,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351600
+      },
+      {
+        "job": 3,
+        "message": "Build slot released.",
+        "sequence": 31,
+        "tick": 9,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351602
+      },
+      {
+        "job": 3,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 32,
+        "tick": 9,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351602
+      },
+      {
+        "job": 3,
+        "message": "Job 3 completed at tick 9.",
+        "sequence": 33,
+        "tick": 9,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351602
+      }
+    ]
+  },
+  {
+    "demo": "A fair share",
+    "steps": [
+      "load-demo round_robin",
+      "step",
+      "step"
+    ],
+    "expected": "First job READY with 3 ticks remaining; 192 MB retained; 1 preemption",
+    "status": "PASS",
+    "stats": {
+      "avg_resource_wait": 0.0,
+      "avg_response": 0.0,
+      "avg_turnaround": 0.0,
+      "avg_wait": 0.0,
+      "busy_worker_ticks": 2,
+      "cancelled": 0,
+      "completed": 0,
+      "completed_sample_count": 0,
+      "contention_events": 0,
+      "context_switch_like_transitions": 1,
+      "cpu_utilization": 100.0,
+      "dispatches": 1,
+      "peak_memory": 192,
+      "preemptions": 1,
+      "running": 0,
+      "throughput": 0.0,
+      "tick": 2,
+      "total": 3,
+      "waiting": 0,
+      "worker_capacity_ticks": 2
+    },
+    "memory": {
+      "allocated_blocks": 1,
+      "blocks": [
+        {
+          "offset": 0,
+          "owner": 4,
+          "size": 192
+        },
+        {
+          "offset": 192,
+          "owner": 0,
+          "size": 832
+        }
+      ],
+      "external_fragmentation": 0.0,
+      "free": 832,
+      "free_blocks": 1,
+      "internal_fragmentation": 0,
+      "largest_free": 832,
+      "policy": "first",
+      "total": 1024,
+      "used": 192,
+      "utilization": 18.75
+    },
+    "resources": {
+      "active_slots": 0,
+      "available_slots": 2,
+      "peak_slots": 1,
+      "shared_counter": 2,
+      "slots": 2
+    },
+    "jobs": [
+      {
+        "arrival": 0,
+        "burst": 5,
+        "completion": -1,
+        "first_run": 0,
+        "id": 4,
+        "memory": 192,
+        "memory_offset": 0,
+        "name": "Compile engine",
+        "priority": 2,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 3,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": -1,
+        "first_run": -1,
+        "id": 5,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Compile interface",
+        "priority": 3,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 2,
+        "remaining": 4,
+        "resource_wait": 0,
+        "response": null,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 2,
+        "burst": 3,
+        "completion": -1,
+        "first_run": -1,
+        "id": 6,
+        "memory": 96,
+        "memory_offset": -1,
+        "name": "Run test suite",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 3,
+        "resource_wait": 0,
+        "response": null,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      }
+    ],
+    "gantt": [
+      {
+        "dispatch": 1,
+        "end": 1,
+        "job": 4,
+        "start": 0,
+        "worker": 0
+      },
+      {
+        "dispatch": 1,
+        "end": 2,
+        "job": 4,
+        "start": 1,
+        "worker": 0
+      }
+    ],
+    "log": [
+      {
+        "job": 0,
+        "message": "Experiment reset. Configuration preserved; job IDs remain unique.",
+        "sequence": 34,
+        "tick": 0,
+        "type": "RESET",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 35,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 4,
+        "message": "Loaded Compile engine from round_robin.",
+        "sequence": 36,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 5,
+        "message": "Loaded Compile interface from round_robin.",
+        "sequence": 37,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 6,
+        "message": "Loaded Run test suite from round_robin.",
+        "sequence": 38,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 4,
+        "message": "Job 4 joined READY.",
+        "sequence": 39,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 5,
+        "message": "Job 5 joined READY.",
+        "sequence": 40,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351603
+      },
+      {
+        "job": 4,
+        "message": "Reserved 192 MB at offset 0.",
+        "sequence": 41,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 4,
+        "message": "Acquired a shared build slot.",
+        "sequence": 42,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 4,
+        "message": "First execution of job 4.",
+        "sequence": 43,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 4,
+        "message": "Job 4 selected: head of the FIFO ready queue; bounded by the configured quantum.",
+        "sequence": 44,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 6,
+        "message": "Job 6 joined READY.",
+        "sequence": 45,
+        "tick": 2,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 4,
+        "message": "Quantum boundary: released slot; retained simulated memory.",
+        "sequence": 46,
+        "tick": 2,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351604
+      },
+      {
+        "job": 4,
+        "message": "Job 4 joined READY.",
+        "sequence": 47,
+        "tick": 2,
+        "type": "JOB_PREEMPTED",
+        "wall_epoch_ms": 1794682351604
+      }
+    ]
+  },
+  {
+    "demo": "Space, scattered",
+    "steps": [
+      "load-demo fragmentation",
+      "step three times"
+    ],
+    "expected": "400 MB request WAITING with holes 180/100/300 MB",
+    "status": "PASS",
+    "stats": {
+      "avg_resource_wait": 0.0,
+      "avg_response": 0.0,
+      "avg_turnaround": 2.0,
+      "avg_wait": 0.0,
+      "busy_worker_ticks": 10,
+      "cancelled": 0,
+      "completed": 2,
+      "completed_sample_count": 2,
+      "contention_events": 1,
+      "context_switch_like_transitions": 4,
+      "cpu_utilization": 83.33333333333333,
+      "dispatches": 4,
+      "peak_memory": 724,
+      "preemptions": 0,
+      "running": 2,
+      "throughput": 0.6666666666666666,
+      "tick": 3,
+      "total": 5,
+      "waiting": 1,
+      "worker_capacity_ticks": 12
+    },
+    "memory": {
+      "allocated_blocks": 2,
+      "blocks": [
+        {
+          "offset": 0,
+          "owner": 0,
+          "size": 180
+        },
+        {
+          "offset": 180,
+          "owner": 8,
+          "size": 100
+        },
+        {
+          "offset": 280,
+          "owner": 0,
+          "size": 100
+        },
+        {
+          "offset": 380,
+          "owner": 10,
+          "size": 344
+        },
+        {
+          "offset": 724,
+          "owner": 0,
+          "size": 300
+        }
+      ],
+      "external_fragmentation": 48.275862068965516,
+      "free": 580,
+      "free_blocks": 3,
+      "internal_fragmentation": 0,
+      "largest_free": 300,
+      "policy": "first",
+      "total": 1024,
+      "used": 444,
+      "utilization": 43.359375
+    },
+    "resources": {
+      "active_slots": 2,
+      "available_slots": 2,
+      "peak_slots": 4,
+      "shared_counter": 10,
+      "slots": 4
+    },
+    "jobs": [
+      {
+        "arrival": 0,
+        "burst": 2,
+        "completion": 2,
+        "first_run": 0,
+        "id": 7,
+        "memory": 180,
+        "memory_offset": -1,
+        "name": "Short partition A",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "COMPLETED",
+        "turnaround": 2,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 8,
+        "completion": -1,
+        "first_run": 0,
+        "id": 8,
+        "memory": 100,
+        "memory_offset": 180,
+        "name": "Long partition B",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 5,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "RUNNING",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": 1
+      },
+      {
+        "arrival": 0,
+        "burst": 2,
+        "completion": 2,
+        "first_run": 0,
+        "id": 9,
+        "memory": 100,
+        "memory_offset": -1,
+        "name": "Short partition C",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "COMPLETED",
+        "turnaround": 2,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 8,
+        "completion": -1,
+        "first_run": 0,
+        "id": 10,
+        "memory": 344,
+        "memory_offset": 380,
+        "name": "Long partition D",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 5,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "RUNNING",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": 3
+      },
+      {
+        "arrival": 2,
+        "burst": 3,
+        "completion": -1,
+        "first_run": -1,
+        "id": 11,
+        "memory": 400,
+        "memory_offset": -1,
+        "name": "Needs contiguous 400 MB",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 3,
+        "resource_wait": 1,
+        "response": null,
+        "state": "WAITING",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "MEMORY_UNAVAILABLE",
+        "worker": -1
+      }
+    ],
+    "gantt": [
+      {
+        "dispatch": 1,
+        "end": 1,
+        "job": 7,
+        "start": 0,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 1,
+        "job": 8,
+        "start": 0,
+        "worker": 1
+      },
+      {
+        "dispatch": 3,
+        "end": 1,
+        "job": 9,
+        "start": 0,
+        "worker": 2
+      },
+      {
+        "dispatch": 4,
+        "end": 1,
+        "job": 10,
+        "start": 0,
+        "worker": 3
+      },
+      {
+        "dispatch": 1,
+        "end": 2,
+        "job": 7,
+        "start": 1,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 2,
+        "job": 8,
+        "start": 1,
+        "worker": 1
+      },
+      {
+        "dispatch": 3,
+        "end": 2,
+        "job": 9,
+        "start": 1,
+        "worker": 2
+      },
+      {
+        "dispatch": 4,
+        "end": 2,
+        "job": 10,
+        "start": 1,
+        "worker": 3
+      },
+      {
+        "dispatch": 0,
+        "end": 3,
+        "job": 0,
+        "start": 2,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 3,
+        "job": 8,
+        "start": 2,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 3,
+        "job": 0,
+        "start": 2,
+        "worker": 2
+      },
+      {
+        "dispatch": 4,
+        "end": 3,
+        "job": 10,
+        "start": 2,
+        "worker": 3
+      }
+    ],
+    "log": [
+      {
+        "job": 0,
+        "message": "Experiment reset. Configuration preserved; job IDs remain unique.",
+        "sequence": 49,
+        "tick": 0,
+        "type": "RESET",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 50,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 51,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "Loaded Short partition A from fragmentation.",
+        "sequence": 52,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "Loaded Long partition B from fragmentation.",
+        "sequence": 53,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "Loaded Short partition C from fragmentation.",
+        "sequence": 54,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "Loaded Long partition D from fragmentation.",
+        "sequence": 55,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 11,
+        "message": "Loaded Needs contiguous 400 MB from fragmentation.",
+        "sequence": 56,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "Job 7 joined READY.",
+        "sequence": 57,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "Job 8 joined READY.",
+        "sequence": 58,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "Job 9 joined READY.",
+        "sequence": 59,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "Job 10 joined READY.",
+        "sequence": 60,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "Reserved 180 MB at offset 0.",
+        "sequence": 61,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "Acquired a shared build slot.",
+        "sequence": 62,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "First execution of job 7.",
+        "sequence": 63,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 7,
+        "message": "Job 7 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 64,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "Reserved 100 MB at offset 180.",
+        "sequence": 65,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "Acquired a shared build slot.",
+        "sequence": 66,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "First execution of job 8.",
+        "sequence": 67,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 8,
+        "message": "Job 8 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 68,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "Reserved 100 MB at offset 280.",
+        "sequence": 69,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "Acquired a shared build slot.",
+        "sequence": 70,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "First execution of job 9.",
+        "sequence": 71,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 9,
+        "message": "Job 9 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 72,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "Reserved 344 MB at offset 380.",
+        "sequence": 73,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "Acquired a shared build slot.",
+        "sequence": 74,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "First execution of job 10.",
+        "sequence": 75,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 10,
+        "message": "Job 10 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 76,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351605
+      },
+      {
+        "job": 11,
+        "message": "Job 11 joined READY.",
+        "sequence": 77,
+        "tick": 2,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 7,
+        "message": "Build slot released.",
+        "sequence": 78,
+        "tick": 2,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 7,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 79,
+        "tick": 2,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 7,
+        "message": "Job 7 completed at tick 2.",
+        "sequence": 80,
+        "tick": 2,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 9,
+        "message": "Build slot released.",
+        "sequence": 81,
+        "tick": 2,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 9,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 82,
+        "tick": 2,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 9,
+        "message": "Job 9 completed at tick 2.",
+        "sequence": 83,
+        "tick": 2,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351606
+      },
+      {
+        "job": 11,
+        "message": "Job 11 WAITING: no contiguous 400 MB block.",
+        "sequence": 84,
+        "tick": 2,
+        "type": "MEMORY_DENIED",
+        "wall_epoch_ms": 1794682351606
+      }
+    ]
+  },
+  {
+    "demo": "Controlled concurrency",
+    "steps": [
+      "load-demo synchronization",
+      "step",
+      "run until complete"
+    ],
+    "expected": "2 holders, 2 blocked at tick 1; all 5 finish; counter 18",
+    "status": "PASS",
+    "stats": {
+      "avg_resource_wait": 3.0,
+      "avg_response": 3.0,
+      "avg_turnaround": 6.6,
+      "avg_wait": 0.0,
+      "busy_worker_ticks": 18,
+      "cancelled": 0,
+      "completed": 5,
+      "completed_sample_count": 5,
+      "contention_events": 4,
+      "context_switch_like_transitions": 5,
+      "cpu_utilization": 45.0,
+      "dispatches": 5,
+      "peak_memory": 256,
+      "preemptions": 0,
+      "running": 0,
+      "throughput": 0.5,
+      "tick": 10,
+      "total": 5,
+      "waiting": 0,
+      "worker_capacity_ticks": 40
+    },
+    "memory": {
+      "allocated_blocks": 0,
+      "blocks": [
+        {
+          "offset": 0,
+          "owner": 0,
+          "size": 1024
+        }
+      ],
+      "external_fragmentation": 0.0,
+      "free": 1024,
+      "free_blocks": 1,
+      "internal_fragmentation": 0,
+      "largest_free": 1024,
+      "policy": "first",
+      "total": 1024,
+      "used": 0,
+      "utilization": 0.0
+    },
+    "resources": {
+      "active_slots": 0,
+      "available_slots": 2,
+      "peak_slots": 2,
+      "shared_counter": 18,
+      "slots": 2
+    },
+    "jobs": [
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": 4,
+        "first_run": 0,
+        "id": 12,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Worker build A",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "COMPLETED",
+        "turnaround": 4,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": 4,
+        "first_run": 0,
+        "id": 13,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Worker build B",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 0,
+        "response": 0,
+        "state": "COMPLETED",
+        "turnaround": 4,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": 8,
+        "first_run": 4,
+        "id": 14,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Worker build C",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 4,
+        "response": 4,
+        "state": "COMPLETED",
+        "turnaround": 8,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": 8,
+        "first_run": 4,
+        "id": 15,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Worker build D",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 4,
+        "response": 4,
+        "state": "COMPLETED",
+        "turnaround": 8,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 1,
+        "burst": 2,
+        "completion": 10,
+        "first_run": 8,
+        "id": 16,
+        "memory": 64,
+        "memory_offset": -1,
+        "name": "Worker build E",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 0,
+        "resource_wait": 7,
+        "response": 7,
+        "state": "COMPLETED",
+        "turnaround": 9,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      }
+    ],
+    "gantt": [
+      {
+        "dispatch": 1,
+        "end": 1,
+        "job": 12,
+        "start": 0,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 1,
+        "job": 13,
+        "start": 0,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 1,
+        "job": 0,
+        "start": 0,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 1,
+        "job": 0,
+        "start": 0,
+        "worker": 3
+      },
+      {
+        "dispatch": 1,
+        "end": 2,
+        "job": 12,
+        "start": 1,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 2,
+        "job": 13,
+        "start": 1,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 2,
+        "job": 0,
+        "start": 1,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 2,
+        "job": 0,
+        "start": 1,
+        "worker": 3
+      },
+      {
+        "dispatch": 1,
+        "end": 3,
+        "job": 12,
+        "start": 2,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 3,
+        "job": 13,
+        "start": 2,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 3,
+        "job": 0,
+        "start": 2,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 3,
+        "job": 0,
+        "start": 2,
+        "worker": 3
+      },
+      {
+        "dispatch": 1,
+        "end": 4,
+        "job": 12,
+        "start": 3,
+        "worker": 0
+      },
+      {
+        "dispatch": 2,
+        "end": 4,
+        "job": 13,
+        "start": 3,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 4,
+        "job": 0,
+        "start": 3,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 4,
+        "job": 0,
+        "start": 3,
+        "worker": 3
+      },
+      {
+        "dispatch": 3,
+        "end": 5,
+        "job": 14,
+        "start": 4,
+        "worker": 0
+      },
+      {
+        "dispatch": 4,
+        "end": 5,
+        "job": 15,
+        "start": 4,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 5,
+        "job": 0,
+        "start": 4,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 5,
+        "job": 0,
+        "start": 4,
+        "worker": 3
+      },
+      {
+        "dispatch": 3,
+        "end": 6,
+        "job": 14,
+        "start": 5,
+        "worker": 0
+      },
+      {
+        "dispatch": 4,
+        "end": 6,
+        "job": 15,
+        "start": 5,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 6,
+        "job": 0,
+        "start": 5,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 6,
+        "job": 0,
+        "start": 5,
+        "worker": 3
+      },
+      {
+        "dispatch": 3,
+        "end": 7,
+        "job": 14,
+        "start": 6,
+        "worker": 0
+      },
+      {
+        "dispatch": 4,
+        "end": 7,
+        "job": 15,
+        "start": 6,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 7,
+        "job": 0,
+        "start": 6,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 7,
+        "job": 0,
+        "start": 6,
+        "worker": 3
+      },
+      {
+        "dispatch": 3,
+        "end": 8,
+        "job": 14,
+        "start": 7,
+        "worker": 0
+      },
+      {
+        "dispatch": 4,
+        "end": 8,
+        "job": 15,
+        "start": 7,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 8,
+        "job": 0,
+        "start": 7,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 8,
+        "job": 0,
+        "start": 7,
+        "worker": 3
+      },
+      {
+        "dispatch": 5,
+        "end": 9,
+        "job": 16,
+        "start": 8,
+        "worker": 0
+      },
+      {
+        "dispatch": 0,
+        "end": 9,
+        "job": 0,
+        "start": 8,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 9,
+        "job": 0,
+        "start": 8,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 9,
+        "job": 0,
+        "start": 8,
+        "worker": 3
+      },
+      {
+        "dispatch": 5,
+        "end": 10,
+        "job": 16,
+        "start": 9,
+        "worker": 0
+      },
+      {
+        "dispatch": 0,
+        "end": 10,
+        "job": 0,
+        "start": 9,
+        "worker": 1
+      },
+      {
+        "dispatch": 0,
+        "end": 10,
+        "job": 0,
+        "start": 9,
+        "worker": 2
+      },
+      {
+        "dispatch": 0,
+        "end": 10,
+        "job": 0,
+        "start": 9,
+        "worker": 3
+      }
+    ],
+    "log": [
+      {
+        "job": 0,
+        "message": "Experiment reset. Configuration preserved; job IDs remain unique.",
+        "sequence": 87,
+        "tick": 0,
+        "type": "RESET",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 88,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 89,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "Loaded Worker build A from synchronization.",
+        "sequence": 90,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "Loaded Worker build B from synchronization.",
+        "sequence": 91,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 14,
+        "message": "Loaded Worker build C from synchronization.",
+        "sequence": 92,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 15,
+        "message": "Loaded Worker build D from synchronization.",
+        "sequence": 93,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 16,
+        "message": "Loaded Worker build E from synchronization.",
+        "sequence": 94,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "Job 12 joined READY.",
+        "sequence": 95,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "Job 13 joined READY.",
+        "sequence": 96,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 14,
+        "message": "Job 14 joined READY.",
+        "sequence": 97,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 15,
+        "message": "Job 15 joined READY.",
+        "sequence": 98,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "Reserved 128 MB at offset 0.",
+        "sequence": 99,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "Acquired a shared build slot.",
+        "sequence": 100,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "First execution of job 12.",
+        "sequence": 101,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 12,
+        "message": "Job 12 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 102,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "Reserved 128 MB at offset 128.",
+        "sequence": 103,
+        "tick": 0,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "Acquired a shared build slot.",
+        "sequence": 104,
+        "tick": 0,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "First execution of job 13.",
+        "sequence": 105,
+        "tick": 0,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 13,
+        "message": "Job 13 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 106,
+        "tick": 0,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 14,
+        "message": "Job 14 WAITING: all build slots are occupied.",
+        "sequence": 107,
+        "tick": 0,
+        "type": "RESOURCE_WAIT",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 15,
+        "message": "Job 15 WAITING: all build slots are occupied.",
+        "sequence": 108,
+        "tick": 0,
+        "type": "RESOURCE_WAIT",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 16,
+        "message": "Job 16 joined READY.",
+        "sequence": 109,
+        "tick": 1,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351607
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 110,
+        "tick": 1,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351608
+      },
+      {
+        "job": 16,
+        "message": "Job 16 WAITING: all build slots are occupied.",
+        "sequence": 111,
+        "tick": 1,
+        "type": "RESOURCE_WAIT",
+        "wall_epoch_ms": 1794682351608
+      },
+      {
+        "job": 12,
+        "message": "Build slot released.",
+        "sequence": 112,
+        "tick": 4,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 12,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 113,
+        "tick": 4,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 12,
+        "message": "Job 12 completed at tick 4.",
+        "sequence": 114,
+        "tick": 4,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 13,
+        "message": "Build slot released.",
+        "sequence": 115,
+        "tick": 4,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 13,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 116,
+        "tick": 4,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 13,
+        "message": "Job 13 completed at tick 4.",
+        "sequence": 117,
+        "tick": 4,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351611
+      },
+      {
+        "job": 14,
+        "message": "Job 14 joined READY.",
+        "sequence": 118,
+        "tick": 4,
+        "type": "RESOURCE_RETRY",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 15,
+        "message": "Job 15 joined READY.",
+        "sequence": 119,
+        "tick": 4,
+        "type": "RESOURCE_RETRY",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 16,
+        "message": "Job 16 joined READY.",
+        "sequence": 120,
+        "tick": 4,
+        "type": "RESOURCE_RETRY",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 14,
+        "message": "Reserved 128 MB at offset 0.",
+        "sequence": 121,
+        "tick": 4,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 14,
+        "message": "Acquired a shared build slot.",
+        "sequence": 122,
+        "tick": 4,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 14,
+        "message": "First execution of job 14.",
+        "sequence": 123,
+        "tick": 4,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 14,
+        "message": "Job 14 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 124,
+        "tick": 4,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 15,
+        "message": "Reserved 128 MB at offset 128.",
+        "sequence": 125,
+        "tick": 4,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 15,
+        "message": "Acquired a shared build slot.",
+        "sequence": 126,
+        "tick": 4,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 15,
+        "message": "First execution of job 15.",
+        "sequence": 127,
+        "tick": 4,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 15,
+        "message": "Job 15 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 128,
+        "tick": 4,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 16,
+        "message": "Job 16 WAITING: all build slots are occupied.",
+        "sequence": 129,
+        "tick": 4,
+        "type": "RESOURCE_WAIT",
+        "wall_epoch_ms": 1794682351612
+      },
+      {
+        "job": 14,
+        "message": "Build slot released.",
+        "sequence": 130,
+        "tick": 8,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 14,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 131,
+        "tick": 8,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 14,
+        "message": "Job 14 completed at tick 8.",
+        "sequence": 132,
+        "tick": 8,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 15,
+        "message": "Build slot released.",
+        "sequence": 133,
+        "tick": 8,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 15,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 134,
+        "tick": 8,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 15,
+        "message": "Job 15 completed at tick 8.",
+        "sequence": 135,
+        "tick": 8,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351616
+      },
+      {
+        "job": 16,
+        "message": "Job 16 joined READY.",
+        "sequence": 136,
+        "tick": 8,
+        "type": "RESOURCE_RETRY",
+        "wall_epoch_ms": 1794682351617
+      },
+      {
+        "job": 16,
+        "message": "Reserved 64 MB at offset 0.",
+        "sequence": 137,
+        "tick": 8,
+        "type": "MEMORY_ALLOCATED",
+        "wall_epoch_ms": 1794682351617
+      },
+      {
+        "job": 16,
+        "message": "Acquired a shared build slot.",
+        "sequence": 138,
+        "tick": 8,
+        "type": "RESOURCE_ACQUIRED",
+        "wall_epoch_ms": 1794682351617
+      },
+      {
+        "job": 16,
+        "message": "First execution of job 16.",
+        "sequence": 139,
+        "tick": 8,
+        "type": "JOB_STARTED",
+        "wall_epoch_ms": 1794682351617
+      },
+      {
+        "job": 16,
+        "message": "Job 16 selected: earliest arrival among eligible jobs (ID breaks ties).",
+        "sequence": 140,
+        "tick": 8,
+        "type": "JOB_DISPATCHED",
+        "wall_epoch_ms": 1794682351617
+      },
+      {
+        "job": 16,
+        "message": "Build slot released.",
+        "sequence": 141,
+        "tick": 10,
+        "type": "RESOURCE_RELEASED",
+        "wall_epoch_ms": 1794682351618
+      },
+      {
+        "job": 16,
+        "message": "Memory released and adjacent holes coalesced.",
+        "sequence": 142,
+        "tick": 10,
+        "type": "MEMORY_RELEASED",
+        "wall_epoch_ms": 1794682351618
+      },
+      {
+        "job": 16,
+        "message": "Job 16 completed at tick 10.",
+        "sequence": 143,
+        "tick": 10,
+        "type": "JOB_COMPLETED",
+        "wall_epoch_ms": 1794682351618
+      }
+    ]
+  },
+  {
+    "demo": "The shortest path",
+    "steps": [
+      "load-demo sjf",
+      "compare twice",
+      "export and parse JSON/CSV"
+    ],
+    "expected": "Four identical-input deterministic runs; exports preserve all table metrics",
+    "status": "PASS",
+    "stats": {
+      "avg_resource_wait": 0.0,
+      "avg_response": 0.0,
+      "avg_turnaround": 0.0,
+      "avg_wait": 0.0,
+      "busy_worker_ticks": 0,
+      "cancelled": 0,
+      "completed": 0,
+      "completed_sample_count": 0,
+      "contention_events": 0,
+      "context_switch_like_transitions": 0,
+      "cpu_utilization": 0.0,
+      "dispatches": 0,
+      "peak_memory": 0,
+      "preemptions": 0,
+      "running": 0,
+      "throughput": 0.0,
+      "tick": 0,
+      "total": 4,
+      "waiting": 0,
+      "worker_capacity_ticks": 0
+    },
+    "memory": {
+      "allocated_blocks": 0,
+      "blocks": [
+        {
+          "offset": 0,
+          "owner": 0,
+          "size": 1024
+        }
+      ],
+      "external_fragmentation": 0.0,
+      "free": 1024,
+      "free_blocks": 1,
+      "internal_fragmentation": 0,
+      "largest_free": 1024,
+      "policy": "first",
+      "total": 1024,
+      "used": 0,
+      "utilization": 0.0
+    },
+    "resources": {
+      "active_slots": 0,
+      "available_slots": 2,
+      "peak_slots": 0,
+      "shared_counter": 0,
+      "slots": 2
+    },
+    "jobs": [
+      {
+        "arrival": 0,
+        "burst": 7,
+        "completion": -1,
+        "first_run": -1,
+        "id": 17,
+        "memory": 192,
+        "memory_offset": -1,
+        "name": "Full rebuild",
+        "priority": 3,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 7,
+        "resource_wait": 0,
+        "response": null,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 2,
+        "completion": -1,
+        "first_run": -1,
+        "id": 18,
+        "memory": 64,
+        "memory_offset": -1,
+        "name": "Lint sources",
+        "priority": 2,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 2,
+        "resource_wait": 0,
+        "response": null,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 0,
+        "burst": 4,
+        "completion": -1,
+        "first_run": -1,
+        "id": 19,
+        "memory": 128,
+        "memory_offset": -1,
+        "name": "Compile module",
+        "priority": 1,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 4,
+        "resource_wait": 0,
+        "response": null,
+        "state": "READY",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      },
+      {
+        "arrival": 1,
+        "burst": 1,
+        "completion": -1,
+        "first_run": -1,
+        "id": 20,
+        "memory": 64,
+        "memory_offset": -1,
+        "name": "Quick check",
+        "priority": 0,
+        "process_error": "",
+        "process_exit": -1,
+        "process_pid": -1,
+        "process_wall_ms": 0.0,
+        "ready_wait": 0,
+        "remaining": 1,
+        "resource_wait": 0,
+        "response": null,
+        "state": "NEW",
+        "turnaround": null,
+        "type": "simulated",
+        "wait_reason": "",
+        "worker": -1
+      }
+    ],
+    "gantt": [],
+    "log": [
+      {
+        "job": 0,
+        "message": "Experiment reset. Configuration preserved; job IDs remain unique.",
+        "sequence": 144,
+        "tick": 0,
+        "type": "RESET",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 0,
+        "message": "Experiment configuration updated.",
+        "sequence": 145,
+        "tick": 0,
+        "type": "CONFIG_CHANGED",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 17,
+        "message": "Loaded Full rebuild from sjf.",
+        "sequence": 146,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 18,
+        "message": "Loaded Lint sources from sjf.",
+        "sequence": 147,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 19,
+        "message": "Loaded Compile module from sjf.",
+        "sequence": 148,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 20,
+        "message": "Loaded Quick check from sjf.",
+        "sequence": 149,
+        "tick": 0,
+        "type": "JOB_SUBMITTED",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 17,
+        "message": "Job 17 joined READY.",
+        "sequence": 150,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 18,
+        "message": "Job 18 joined READY.",
+        "sequence": 151,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351622
+      },
+      {
+        "job": 19,
+        "message": "Job 19 joined READY.",
+        "sequence": 152,
+        "tick": 0,
+        "type": "JOB_READY",
+        "wall_epoch_ms": 1794682351622
+      }
+    ],
+    "comparison": {
+      "configuration": {
+        "delay_ms": 0,
+        "memory": 1024,
+        "memory_policy": "first",
+        "mode": "simulation",
+        "policy": "sjf",
+        "quantum": 2,
+        "slots": 2,
+        "workers": 1
+      },
+      "results": [
+        {
+          "gantt": [
+            {
+              "dispatch": 1,
+              "end": 1,
+              "job": 1,
+              "start": 0,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 2,
+              "job": 1,
+              "start": 1,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 3,
+              "job": 1,
+              "start": 2,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 4,
+              "job": 1,
+              "start": 3,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 5,
+              "job": 1,
+              "start": 4,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 6,
+              "job": 1,
+              "start": 5,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 7,
+              "job": 1,
+              "start": 6,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 8,
+              "job": 2,
+              "start": 7,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 9,
+              "job": 2,
+              "start": 8,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 10,
+              "job": 3,
+              "start": 9,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 11,
+              "job": 3,
+              "start": 10,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 12,
+              "job": 3,
+              "start": 11,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 13,
+              "job": 3,
+              "start": 12,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 14,
+              "job": 4,
+              "start": 13,
+              "worker": 0
+            }
+          ],
+          "policy": "fcfs",
+          "stats": {
+            "avg_resource_wait": 0.0,
+            "avg_response": 7.0,
+            "avg_turnaround": 10.5,
+            "avg_wait": 7.0,
+            "busy_worker_ticks": 14,
+            "cancelled": 0,
+            "completed": 4,
+            "completed_sample_count": 4,
+            "contention_events": 0,
+            "context_switch_like_transitions": 4,
+            "cpu_utilization": 100.0,
+            "dispatches": 4,
+            "peak_memory": 192,
+            "preemptions": 0,
+            "running": 0,
+            "throughput": 0.2857142857142857,
+            "tick": 14,
+            "total": 4,
+            "waiting": 0,
+            "worker_capacity_ticks": 14
+          }
+        },
+        {
+          "gantt": [
+            {
+              "dispatch": 1,
+              "end": 1,
+              "job": 2,
+              "start": 0,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 2,
+              "job": 2,
+              "start": 1,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 3,
+              "job": 4,
+              "start": 2,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 4,
+              "job": 3,
+              "start": 3,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 5,
+              "job": 3,
+              "start": 4,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 6,
+              "job": 3,
+              "start": 5,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 7,
+              "job": 3,
+              "start": 6,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 8,
+              "job": 1,
+              "start": 7,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 9,
+              "job": 1,
+              "start": 8,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 10,
+              "job": 1,
+              "start": 9,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 11,
+              "job": 1,
+              "start": 10,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 12,
+              "job": 1,
+              "start": 11,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 13,
+              "job": 1,
+              "start": 12,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 14,
+              "job": 1,
+              "start": 13,
+              "worker": 0
+            }
+          ],
+          "policy": "sjf",
+          "stats": {
+            "avg_resource_wait": 0.0,
+            "avg_response": 2.75,
+            "avg_turnaround": 6.25,
+            "avg_wait": 2.75,
+            "busy_worker_ticks": 14,
+            "cancelled": 0,
+            "completed": 4,
+            "completed_sample_count": 4,
+            "contention_events": 0,
+            "context_switch_like_transitions": 4,
+            "cpu_utilization": 100.0,
+            "dispatches": 4,
+            "peak_memory": 192,
+            "preemptions": 0,
+            "running": 0,
+            "throughput": 0.2857142857142857,
+            "tick": 14,
+            "total": 4,
+            "waiting": 0,
+            "worker_capacity_ticks": 14
+          }
+        },
+        {
+          "gantt": [
+            {
+              "dispatch": 1,
+              "end": 1,
+              "job": 3,
+              "start": 0,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 2,
+              "job": 3,
+              "start": 1,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 3,
+              "job": 3,
+              "start": 2,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 4,
+              "job": 3,
+              "start": 3,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 5,
+              "job": 4,
+              "start": 4,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 6,
+              "job": 2,
+              "start": 5,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 7,
+              "job": 2,
+              "start": 6,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 8,
+              "job": 1,
+              "start": 7,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 9,
+              "job": 1,
+              "start": 8,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 10,
+              "job": 1,
+              "start": 9,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 11,
+              "job": 1,
+              "start": 10,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 12,
+              "job": 1,
+              "start": 11,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 13,
+              "job": 1,
+              "start": 12,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 14,
+              "job": 1,
+              "start": 13,
+              "worker": 0
+            }
+          ],
+          "policy": "priority",
+          "stats": {
+            "avg_resource_wait": 0.0,
+            "avg_response": 3.75,
+            "avg_turnaround": 7.25,
+            "avg_wait": 3.75,
+            "busy_worker_ticks": 14,
+            "cancelled": 0,
+            "completed": 4,
+            "completed_sample_count": 4,
+            "contention_events": 0,
+            "context_switch_like_transitions": 4,
+            "cpu_utilization": 100.0,
+            "dispatches": 4,
+            "peak_memory": 192,
+            "preemptions": 0,
+            "running": 0,
+            "throughput": 0.2857142857142857,
+            "tick": 14,
+            "total": 4,
+            "waiting": 0,
+            "worker_capacity_ticks": 14
+          }
+        },
+        {
+          "gantt": [
+            {
+              "dispatch": 1,
+              "end": 1,
+              "job": 1,
+              "start": 0,
+              "worker": 0
+            },
+            {
+              "dispatch": 1,
+              "end": 2,
+              "job": 1,
+              "start": 1,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 3,
+              "job": 2,
+              "start": 2,
+              "worker": 0
+            },
+            {
+              "dispatch": 2,
+              "end": 4,
+              "job": 2,
+              "start": 3,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 5,
+              "job": 3,
+              "start": 4,
+              "worker": 0
+            },
+            {
+              "dispatch": 3,
+              "end": 6,
+              "job": 3,
+              "start": 5,
+              "worker": 0
+            },
+            {
+              "dispatch": 4,
+              "end": 7,
+              "job": 4,
+              "start": 6,
+              "worker": 0
+            },
+            {
+              "dispatch": 5,
+              "end": 8,
+              "job": 1,
+              "start": 7,
+              "worker": 0
+            },
+            {
+              "dispatch": 5,
+              "end": 9,
+              "job": 1,
+              "start": 8,
+              "worker": 0
+            },
+            {
+              "dispatch": 6,
+              "end": 10,
+              "job": 3,
+              "start": 9,
+              "worker": 0
+            },
+            {
+              "dispatch": 6,
+              "end": 11,
+              "job": 3,
+              "start": 10,
+              "worker": 0
+            },
+            {
+              "dispatch": 7,
+              "end": 12,
+              "job": 1,
+              "start": 11,
+              "worker": 0
+            },
+            {
+              "dispatch": 7,
+              "end": 13,
+              "job": 1,
+              "start": 12,
+              "worker": 0
+            },
+            {
+              "dispatch": 8,
+              "end": 14,
+              "job": 1,
+              "start": 13,
+              "worker": 0
+            }
+          ],
+          "policy": "rr",
+          "stats": {
+            "avg_resource_wait": 0.0,
+            "avg_response": 2.75,
+            "avg_turnaround": 8.75,
+            "avg_wait": 5.25,
+            "busy_worker_ticks": 14,
+            "cancelled": 0,
+            "completed": 4,
+            "completed_sample_count": 4,
+            "contention_events": 0,
+            "context_switch_like_transitions": 8,
+            "cpu_utilization": 100.0,
+            "dispatches": 8,
+            "peak_memory": 384,
+            "preemptions": 4,
+            "running": 0,
+            "throughput": 0.2857142857142857,
+            "tick": 14,
+            "total": 4,
+            "waiting": 0,
+            "worker_capacity_ticks": 14
+          }
+        }
+      ],
+      "source_revision": 12,
+      "workload_size": 4
+    }
+  }
+]

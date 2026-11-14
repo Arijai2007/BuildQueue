@@ -1,0 +1,5 @@
+name,arrival,burst,priority,memory,type
+Full rebuild,0,7,3,192,simulated
+Lint sources,0,2,2,64,simulated
+Compile module,0,4,1,128,simulated
+Quick check,1,1,0,64,simulated

@@ -1,0 +1,5 @@
+name,arrival,burst,priority,memory,type
+Documentation,0,3,5,96,simulated
+Critical patch,0,4,0,192,simulated
+Security tests,0,2,1,128,simulated
+Regular tests,0,2,1,96,simulated

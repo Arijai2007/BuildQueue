@@ -1,0 +1,367 @@
+-- The CXX compiler identification is GNU 12.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/bq-http-tsan
+[ 18%] Building CXX object CMakeFiles/buildqueue_core.dir/src/JobManager.cpp.o
+[ 18%] Building CXX object CMakeFiles/buildqueue_core.dir/src/BuildQueueEngine.cpp.o
+[ 18%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Api.cpp.o
+[ 25%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Logger.cpp.o
+[ 31%] Building CXX object CMakeFiles/buildqueue_core.dir/src/MemoryManager.cpp.o
+[ 37%] Building CXX object CMakeFiles/buildqueue_core.dir/src/MonitoringEngine.cpp.o
+[ 43%] Building CXX object CMakeFiles/buildqueue_core.dir/src/Scenario.cpp.o
+[ 50%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SchedulerEngine.cpp.o
+[ 56%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SchedulingPolicies.cpp.o
+[ 62%] Building CXX object CMakeFiles/buildqueue_core.dir/src/SyncController.cpp.o
+[ 68%] Building CXX object CMakeFiles/buildqueue_core.dir/src/WorkerManager.cpp.o
+[ 75%] Linking CXX static library libbuildqueue_core.a
+[ 75%] Built target buildqueue_core
+[ 87%] Building CXX object CMakeFiles/buildqueue.dir/src/CLI.cpp.o
+[ 87%] Building CXX object CMakeFiles/buildqueue.dir/src/HttpServer.cpp.o
+[ 93%] Building CXX object CMakeFiles/buildqueue.dir/src/main.cpp.o
+[100%] Linking CXX executable buildqueue
+[100%] Built target buildqueue
+PASS Port conflict returns a useful startup error
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS GET jobs/+1: HTTP 400
+PASS jobs/+1: consistent JSON envelope
+PASS GET jobs/-1: HTTP 400
+PASS jobs/-1: consistent JSON envelope
+PASS GET jobs/abc: HTTP 400
+PASS jobs/abc: consistent JSON envelope
+PASS GET jobs/999999999999999999999999: HTTP 400
+PASS jobs/999999999999999999999999: consistent JSON envelope
+PASS POST workers: HTTP 400
+PASS workers: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS GET memory: HTTP 200
+PASS memory: consistent JSON envelope
+PASS Documented maximum capacity is reachable through HTTP
+PASS POST submit: HTTP 415
+PASS submit: consistent JSON envelope
+PASS PUT config: HTTP 405
+PASS config: consistent JSON envelope
+PASS GET not-a-route: HTTP 404
+PASS not-a-route: consistent JSON envelope
+PASS POST submit: HTTP 413
+PASS submit: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST run: HTTP 200
+PASS run: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS FCFS individual waiting times
+PASS FCFS individual turnaround times
+PASS FCFS unrounded average metrics
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS RR preempts after two ticks preserving remaining burst
+PASS RR retains 192 MB reservation and releases slot
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Fragmentation uses actual WAITING reason
+PASS 580 MB free but largest hole only 300 MB
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Four logical workers share two real semaphore permits
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST run: HTTP 200
+PASS run: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS All blocked jobs progress; peak permits 2; atomic counter 18
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS POST compare: HTTP 200
+PASS compare: consistent JSON envelope
+PASS POST compare: HTTP 200
+PASS compare: consistent JSON envelope
+PASS SJF scenario comparisons replay identically
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Comparison leaves original experiment unchanged
+PASS All policies receive the same four input jobs
+PASS Export fcfs avg_wait matches displayed source metric
+PASS Export fcfs avg_turnaround matches displayed source metric
+PASS Export fcfs avg_response matches displayed source metric
+PASS Export fcfs cpu_utilization matches displayed source metric
+PASS Export fcfs throughput matches displayed source metric
+PASS Export fcfs context_switch_like_transitions matches displayed source metric
+PASS Export sjf avg_wait matches displayed source metric
+PASS Export sjf avg_turnaround matches displayed source metric
+PASS Export sjf avg_response matches displayed source metric
+PASS Export sjf cpu_utilization matches displayed source metric
+PASS Export sjf throughput matches displayed source metric
+PASS Export sjf context_switch_like_transitions matches displayed source metric
+PASS Export priority avg_wait matches displayed source metric
+PASS Export priority avg_turnaround matches displayed source metric
+PASS Export priority avg_response matches displayed source metric
+PASS Export priority cpu_utilization matches displayed source metric
+PASS Export priority throughput matches displayed source metric
+PASS Export priority context_switch_like_transitions matches displayed source metric
+PASS Export rr avg_wait matches displayed source metric
+PASS Export rr avg_turnaround matches displayed source metric
+PASS Export rr avg_response matches displayed source metric
+PASS Export rr cpu_utilization matches displayed source metric
+PASS Export rr throughput matches displayed source metric
+PASS Export rr context_switch_like_transitions matches displayed source metric
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS POST cancel: HTTP 200
+PASS cancel: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Cancelling a WAITING job leaves running owners intact
+PASS POST cancel: HTTP 400
+PASS cancel: consistent JSON envelope
+PASS POST config: HTTP 200
+PASS config: consistent JSON envelope
+PASS POST run: HTTP 200
+PASS run: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS WAITING cancellation and subsequent completion reclaim resources
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS POST submit: HTTP 201
+PASS submit: consistent JSON envelope
+PASS Concurrent HTTP submissions produce 24 unique IDs
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Concurrent snapshots contain coherent job registries
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS POST load-demo: HTTP 200
+PASS load-demo: consistent JSON envelope
+PASS POST step: HTTP 200
+PASS step: consistent JSON envelope
+PASS POST reset: HTTP 200
+PASS reset: consistent JSON envelope
+PASS GET snapshot: HTTP 200
+PASS snapshot: consistent JSON envelope
+PASS Repeated scenario reset releases reservations and permits
+PASS Audit server shutdown is clean
+PASS Startup/shutdown cycle 1
+PASS Startup/shutdown cycle 2
+PASS Startup/shutdown cycle 3
+All independent audit checks passed. Evidence: docs/evidence/

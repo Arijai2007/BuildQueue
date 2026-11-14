@@ -1,0 +1,113 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 316B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#2 DONE 1.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 106B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc
+#4 resolve docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 102.56kB 0.0s done
+#5 DONE 0.0s
+
+#6 [2/5] RUN apt-get update && apt-get install -y --no-install-recommends g++ make cmake python3 ca-certificates && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [3/5] WORKDIR /workspace
+#7 CACHED
+
+#8 [4/5] COPY . .
+#8 DONE 0.1s
+
+#9 [5/5] RUN make -j2 && make test
+#9 0.274 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Api.cpp -o .build/Api.o
+#9 0.275 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/BuildQueueEngine.cpp -o .build/BuildQueueEngine.o
+#9 8.008 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/CLI.cpp -o .build/CLI.o
+#9 8.063 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/HttpServer.cpp -o .build/HttpServer.o
+#9 12.50 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/JobManager.cpp -o .build/JobManager.o
+#9 15.32 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Logger.cpp -o .build/Logger.o
+#9 17.82 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MemoryManager.cpp -o .build/MemoryManager.o
+#9 19.93 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/MonitoringEngine.cpp -o .build/MonitoringEngine.o
+#9 20.80 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/Scenario.cpp -o .build/Scenario.o
+#9 21.78 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulerEngine.cpp -o .build/SchedulerEngine.o
+#9 21.85 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SchedulingPolicies.cpp -o .build/SchedulingPolicies.o
+#9 22.75 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/SyncController.cpp -o .build/SyncController.o
+#9 22.76 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/WorkerManager.cpp -o .build/WorkerManager.o
+#9 23.54 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c src/main.cpp -o .build/main.o
+#9 25.62 g++ .build/Api.o .build/BuildQueueEngine.o .build/CLI.o .build/HttpServer.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/main.o -pthread -o buildqueue
+#9 25.85 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_api.cpp -o .build/test_test_api.o
+#9 27.37 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_audit.cpp -o .build/test_test_audit.o
+#9 29.55 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_integration.cpp -o .build/test_test_integration.o
+#9 31.86 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_main.cpp -o .build/test_test_main.o
+#9 32.74 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_memory.cpp -o .build/test_test_memory.o
+#9 34.78 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_scheduler.cpp -o .build/test_test_scheduler.o
+#9 37.25 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_stress.cpp -o .build/test_test_stress.o
+#9 39.52 g++ -Iinclude -Ithird_party -DBUILDQUEUE_ROOT='"/workspace"' -std=c++17 -O2 -g -Wall -Wextra -Wpedantic -pthread -MMD -MP -c tests/test_synchronization.cpp -o .build/test_test_synchronization.o
+#9 41.46 g++ .build/Api.o .build/BuildQueueEngine.o .build/JobManager.o .build/Logger.o .build/MemoryManager.o .build/MonitoringEngine.o .build/Scenario.o .build/SchedulerEngine.o .build/SchedulingPolicies.o .build/SyncController.o .build/WorkerManager.o .build/test_test_api.o .build/test_test_audit.o .build/test_test_integration.o .build/test_test_main.o .build/test_test_memory.o .build/test_test_scheduler.o .build/test_test_stress.o .build/test_test_synchronization.o -pthread -o .build/buildqueue_tests
+#9 41.77 ./.build/buildqueue_tests
+#9 41.79 PASS REST_validation_and_real_engine_operations
+#9 41.79 PASS Audit_exact_tick_budget_finishes_without_false_error
+#9 41.79 PASS Audit_documented_maximum_memory_capacity_is_accepted
+#9 41.79 PASS Audit_missing_and_malformed_API_identifiers_are_bad_requests
+#9 41.79 PASS Audit_arrival_now_is_assigned_atomically_at_submission
+#9 41.79 PASS Audit_revisions_track_inputs_without_invalidating_tick_playback
+#9 41.80 PASS Audit_repeated_reset_reclaims_resources_and_keeps_unique_IDs
+#9 44.80 PASS Audit_process_timeout_is_reported_and_child_is_reaped
+#9 44.80 PASS Audit_disk_write_failure_cannot_leak_a_build_slot
+#9 44.80 PASS T1_Initialization
+#9 44.80 PASS T2_Submission_attributes_and_states
+#9 44.80 PASS Invalid_input_atomicity_and_IDs
+#9 44.81 PASS Cancellation_rules_and_repeated_cancellation
+#9 44.81 PASS Reset_and_safe_resize
+#9 44.81 PASS Live_POSIX_process_reaped_and_bounded
+#9 44.82 PASS All_demos_complete_and_release_resources
+#9 44.82 PASS Resize_preserves_historical_CPU_capacity
+#9 44.82 PASS Resource_wait_does_not_become_CPU_wait_while_lanes_are_busy
+#9 44.82 PASS T7_Memory_all_policies_fragmented_addresses
+#9 44.82 PASS T9_Insufficient_memory_waits_then_resumes
+#9 44.82 PASS T10_Resource_release_and_cancel_retained_memory
+#9 44.82 PASS Coalescing_double_free_and_ownership
+#9 44.82 PASS Observable_fragmentation_demo
+#9 44.82 PASS Memory_policy_demos_match_selected_address
+#9 44.82   Expected wait 8/3 = 2.66667; actual 2.6666666666666665 | Expected turnaround 17/3 = 5.66667; actual 5.666666666666667
+#9 44.82 PASS T3_FCFS_hand_calculated
+#9 44.82 PASS T4_SJF_nonpreemptive
+#9 44.82 PASS T5_Priority_and_stable_ties
+#9 44.82 PASS T6_RR_boundary_arrivals_and_remaining
+#9 44.83 PASS Future_arrivals_and_explicit_idle
+#9 44.83 PASS Deterministic_replay_and_conservation
+#9 44.83 PASS Policy_switch_preserves_running_job
+#9 44.83 PASS Comparison_isolated_identical_inputs
+#9 44.83 PASS RR_slice_boundaries_survive_log_clearing
+#9 44.84 PASS Concurrent_memory_requests_preserve_partition
+#9 44.84 PASS Adversarial_RR_owners_progress_under_memory_pressure
+#9 44.84 PASS Process_errors_are_visible_and_resources_release
+#9 44.84 PASS State_machine_rejects_invalid_transitions
+#9 44.84 PASS Invalid_configuration_is_transactional
+#9 44.85 PASS T8_Concurrent_semaphore_and_protected_counter
+#9 44.85 PASS Worker_queue_concurrency_and_clean_shutdown
+#9 44.85 PASS Resource_contention_and_multiworker_lanes
+#9 44.87 PASS Concurrent_snapshots_while_coordinator_runs
+#9 44.87 42/42 tests passed
+#9 DONE 44.9s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 2.2s done
+#10 exporting manifest sha256:43842c67b1a38f4c7089a11f7c0e9842123021489b0f10967a8b25fb934ab0fe done
+#10 exporting config sha256:b9f02e2dde8b391e4255e02704a801f16e6b94f6b1b9a9647873096531578e1a done
+#10 exporting attestation manifest sha256:31843b56c78f5c8b713caf397968c950f51f7ba005db98544d149f74f203a9b7 done
+#10 exporting manifest list sha256:3baff04ff4ae84cde3579242e669df109b14f87f70867bdd3f25cc5000196e41 done
+#10 naming to docker.io/library/buildqueue-lab:latest done
+#10 unpacking to docker.io/library/buildqueue-lab:latest
+#10 unpacking to docker.io/library/buildqueue-lab:latest 0.3s done
+#10 DONE 2.5s

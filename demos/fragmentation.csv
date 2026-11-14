@@ -1,0 +1,6 @@
+name,arrival,burst,priority,memory,type
+Short partition A,0,2,1,180,simulated
+Long partition B,0,8,1,100,simulated
+Short partition C,0,2,1,100,simulated
+Long partition D,0,8,1,344,simulated
+Needs contiguous 400 MB,2,3,1,400,simulated

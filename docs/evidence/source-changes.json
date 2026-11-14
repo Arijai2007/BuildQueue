@@ -1,0 +1,177 @@
+[
+  {
+    "path": "Makefile",
+    "change": "modified",
+    "before_sha256": "1db3c7fd02b54217e05eaedb94e0df44c4f42db8064efd1b12f2d873437f549f",
+    "after_sha256": "aecf0b2fafaf2e00a391ac3540a6e1192d49c1b4024f447cefdf9af4a5c6e3a9"
+  },
+  {
+    "path": "README.md",
+    "change": "modified",
+    "before_sha256": "975b5b02e91b7b751c2be8b7b9e980748f3b9bf8e8ec603f3aa4f6bef372233d",
+    "after_sha256": "cf426f7a8178e89dd019409bfbcc3f8825dfbf1b3fb76a88071db3c0298261d1"
+  },
+  {
+    "path": "web/index.html",
+    "change": "modified",
+    "before_sha256": "0a552d131309c58718a131c75b6f0f57b0e3911e25a7f729edf156919b129baf",
+    "after_sha256": "69753ea6a1ce03390ac8466b2ed53f3553d5be64906b60ce39bcab217f1a58f1"
+  },
+  {
+    "path": "include/Logger.hpp",
+    "change": "modified",
+    "before_sha256": "1843db7161f76fc6178addebecefc9b5ccb039e8ec3873f3b23a72a3f1e02157",
+    "after_sha256": "7624813ee271bb4d4fe07721a2464c7ef05763c5875699191bb972d7708c46fb"
+  },
+  {
+    "path": "include/BuildQueueEngine.hpp",
+    "change": "modified",
+    "before_sha256": "2647a1a9788953bfb77ae8eeb89a6fea0d00e4c0994f32ed6bf95bbd77e179c0",
+    "after_sha256": "11929b7e7b2a86eafa59f3f5f8b255ca0dfab7581beea69880a39385fad90574"
+  },
+  {
+    "path": "docs/IMPLEMENTATION_STATUS.md",
+    "change": "modified",
+    "before_sha256": "2b854b4fc2e46f60fb51c2c5dd8a40cb8712c2515721edad708d463e6625e798",
+    "after_sha256": "5615829138997c71f1ba9e6117d7bade93f022aa5d3b36016731ea849bb8303e"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "change": "modified",
+    "before_sha256": "419a5cfc0a6081bf6246d73b61eb1c1a5df9d4c74614d14510ee1b29dba90950",
+    "after_sha256": "b1e9b918d1942b77af04d7d5cbc3b358f41abd51a1a96f295c1490d71fa81195"
+  },
+  {
+    "path": "docs/API.md",
+    "change": "modified",
+    "before_sha256": "875872733bdf4db7a3ec6a0f8dc31c042060d47989baadbb3edf871c3508094c",
+    "after_sha256": "779b5531dbdd2f1854af93083255177846b4be5c429feeea2e638fff4479d4b4"
+  },
+  {
+    "path": "docs/TESTING.md",
+    "change": "modified",
+    "before_sha256": "1d766a48851525dc3798bb40b172c419c00ac047eb3c23f6d68dc829ddff4c20",
+    "after_sha256": "582eec8110960cd98222c92cf97707eb31bdf5f6d483cefcb69064a1377f141a"
+  },
+  {
+    "path": "docs/VIVA_GUIDE.md",
+    "change": "modified",
+    "before_sha256": "d1e82a102b3b430452a774806c8f7402bffc7bdd7dad3641c4bd7832dd66cb86",
+    "after_sha256": "04ff4218e990429614050e665841bf9bedb0f252f0be142c7a6aacf5245c49e6"
+  },
+  {
+    "path": "docs/DEMO_GUIDE.md",
+    "change": "modified",
+    "before_sha256": "7bbd2380f937782c5d27c23903d6d5e7828fb168576f1eb862c325481d80c494",
+    "after_sha256": "acf3580247153cbcf79774d52236264b0407c598a466e85c4563afc699999565"
+  },
+  {
+    "path": "docs/DESIGN.md",
+    "change": "modified",
+    "before_sha256": "72bf9e5280cc5c8726f36007d6d10267d76517364750a37ee9da4dc422b539cc",
+    "after_sha256": "fe772e789c2797429dd22a7ed9b5fbb685a375fa6bb178dbe946a6d011f48d99"
+  },
+  {
+    "path": "scripts/smoke_test.py",
+    "change": "modified",
+    "before_sha256": "27e3d87a0e3369b9c3780eebf76f2a8f8ee232500e73697eedd7f0b9ae767b50",
+    "after_sha256": "3a2408a79eba218f064bea21a5b32071a98594583d65dc9a96a08bf873fab879"
+  },
+  {
+    "path": "scripts/verify_linux.sh",
+    "change": "modified",
+    "before_sha256": "acb9ac0e518e472a85761c9391255a4e786b86ffe982046266db97ea6cc45518",
+    "after_sha256": "4a85f47eb2cb8ba307e65127833373a29d6c2781d732c30adb7f89b2908fc931"
+  },
+  {
+    "path": "src/WorkerManager.cpp",
+    "change": "modified",
+    "before_sha256": "bb97c8f649638a3014ba316eb35a1be29223493a45513574a8120639dc387417",
+    "after_sha256": "5acbe9bce2c12315530f98ab9f7d6268b89b2dc0f95de388867bf31b694fcb73"
+  },
+  {
+    "path": "src/Api.cpp",
+    "change": "modified",
+    "before_sha256": "aade73383f70394c3b2d783f46f7e8367097a1eb3f65362f62e2d2ea39a0290e",
+    "after_sha256": "eaaedf9af79235034c50edef52edc3cd3d4f610355045b2802d1e6c7ea8561dd"
+  },
+  {
+    "path": "src/HttpServer.cpp",
+    "change": "modified",
+    "before_sha256": "4345c8426b6718f25c96d2376ffde3cdff366e37af66dee689ec31454a50f06b",
+    "after_sha256": "dab0a1032538594810c5cc0ce01521442eed57cc8662363ab5d8c95d218fe785"
+  },
+  {
+    "path": "src/CLI.cpp",
+    "change": "modified",
+    "before_sha256": "8a263ae99f7266de4a9c279e91c674d5be0af20cbab3c41314af2d9ded76d746",
+    "after_sha256": "61ce037ed09b6f577389b7d0a9901f4be09048e917d327a9a29542c532b0f483"
+  },
+  {
+    "path": "src/Logger.cpp",
+    "change": "modified",
+    "before_sha256": "eb9db023b42e9bc4e28366af9d80ce6d2e551d98a94ba4b9dc9ec97525784dc1",
+    "after_sha256": "584a7229803502855e8e733f9ee05ccb280a19029c3d0b0a9bfc991097b42978"
+  },
+  {
+    "path": "src/BuildQueueEngine.cpp",
+    "change": "modified",
+    "before_sha256": "73d5ea0e1416edeae04a14dd80a89c8253f260304872e05173ba0ca9a97beef3",
+    "after_sha256": "a581ab92497e4374b9fc8f65e3f148e35362081848e752e37fbaa4070bcf5763"
+  },
+  {
+    "path": "src/JobManager.cpp",
+    "change": "modified",
+    "before_sha256": "8d4b8f9c8862e2d0fd1ceca3543b7ed9524a8d14bfce837f39705d4b11098eb7",
+    "after_sha256": "9af4783b3a479f64d916b7a05c4eececb534058cafc5d72b4dac5543e0d6fb55"
+  },
+  {
+    "path": "web/css/styles.css",
+    "change": "modified",
+    "before_sha256": "85b48c2eab959b1c218c82d6d77b0ac17a67d210cc170a396b7fa006852da437",
+    "after_sha256": "feaa6093a32f706733f4ef3aaac26f4b4b455e909ac0d0784b6fc1d17bea9e7a"
+  },
+  {
+    "path": "web/js/charts.js",
+    "change": "modified",
+    "before_sha256": "0eb56401e7cab6768280e07c01f2fc66e3c6a579f5f10b846c2abde3387ef498",
+    "after_sha256": "61c95ae0dbf5643b34cfbc08913f7f6cb654d16be03b51a0d5bd33a65462ed3d"
+  },
+  {
+    "path": "web/js/api.js",
+    "change": "modified",
+    "before_sha256": "4471b45f8f77b11ddba040a2452f30fdc9e51079830c92d8ee7a3d8f221de821",
+    "after_sha256": "d2be12d5ac4a13f8324a3c758e6989a038a5a658580d4f1a588ad98991c28373"
+  },
+  {
+    "path": "web/js/app.js",
+    "change": "modified",
+    "before_sha256": "20ca1517e91d522a01703678d037841f7baa53be773898f6d6bb647a1e556448",
+    "after_sha256": "6289a3a133fdd24c75ebe29b37803f6d468dbd7c33d8178b0c872f7446fb20e9"
+  },
+  {
+    "path": "tests/test_audit.cpp",
+    "change": "added",
+    "after_sha256": "fb4d2d097690c600af92c305cc971c119540c055148c2a4c3f1e9349e2b07723"
+  },
+  {
+    "path": "scripts/audit_test.py",
+    "change": "added",
+    "after_sha256": "42053f47170156d9d497486df5293884cc49cc849b19112c44aa3dad05673ed0"
+  },
+  {
+    "path": "scripts/test_frontend.mjs",
+    "change": "added",
+    "after_sha256": "c0f5ad2e4761bdbcbb54bca513aac8fa54530e3175f166e71ede0c4235167d06"
+  },
+  {
+    "path": "web/js/exports.js",
+    "change": "added",
+    "after_sha256": "bc55313ea49d61a5d97cf911108ff06663df3b8cec665981fc3304ebbb9b3b84"
+  },
+  {
+    "path": "docs/AUDIT_REPORT.md",
+    "change": "added",
+    "after_sha256": "58cb13a770e2d628434ac2cbe52e9163040f71df08fe6fe3e25d18e47e358739"
+  }
+]
