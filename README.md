@@ -2,14 +2,7 @@
 
 ### An Intelligent Local Job & Resource Management System
 
-**Jaypee Institute of Information Technology** · Operating Systems Lab · **24B15CS312**  
-Project Based Learning (PBL) · Submitted to **Dr. Ambalika Sarkar**
 
-| Submitted by | Enrollment number | Batch |
-|---|---|---|
-| Arihant Jain | 992401030014 | F1 |
-| Yuvraj Rana | 992401030021 | F1 |
-| Siddharth Singh | 992401030026 | F1 |
 
 BuildQueue connects CPU scheduling, contiguous memory allocation, semaphore admission, persistent worker threads, POSIX processes, and performance reporting in one local application. Its deterministic coordinator makes scheduling experiments reproducible; the offline Control Center makes each resource decision visible. A second, explicitly live mode executes real worker tasks and a bounded, predefined file checksum process.
 
