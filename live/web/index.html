@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BuildQueue � File checksums</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <header><div class="frame top"><span>BuildQueue</span><span id="connection" role="status">Connecting.</span></div></header>
+  <main class="frame">
+    <h1>File checksum queue</h1>
+    <p class="intro">Choose files from your input folder to compute CRC checksums.</p>
+    <div class="layout">
+      <section aria-labelledby="file-heading">
+        <div class="heading"><h2 id="file-heading">Input files</h2><button type="button" id="refresh">Refresh</button></div>
+        <div id="files" class="files"></div>
+        <div class="controls">
+          <label for="priority">Priority <span>(0 is highest)</span></label>
+          <input type="number" id="priority" value="0" min="0" max="9" step="1" required>
+          <button type="button" class="primary" id="submit" disabled>Queue files</button>
+        </div>
+      </section>
+      <section aria-labelledby="queue-heading">
+        <div class="heading"><h2 id="queue-heading">Job activity</h2><button type="button" id="clear">Clear finished</button></div>
+        <div class="summary">
+          <span id="slots">Waiting for server</span>
+          <label>Scheduling <select id="policy" title="Shortest job first uses file size as its estimate"><option value="fcfs">First come, first served</option><option value="priority">Priority</option><option value="sjf">Shortest job first</option></select></label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">File</th><th scope="col">State</th><th scope="col">Checksum</th><th scope="col">PID</th><th scope="col">Wait</th><th scope="col">Run</th><th scope="col">Action</th></tr></thead>
+            <tbody id="jobs"></tbody>
+          </table>
+        </div>
+        <p id="empty" class="muted">Queued files will appear here.</p>
+      </section>
+    </div>
+    <p id="message" role="status"></p>
+    <div class="diagnostics">
+      <section aria-labelledby="timeline-heading">
+        <h2 id="timeline-heading">Job timeline</h2>
+        <p id="timeline-empty" class="muted">Queue a file to start the timeline.</p>
+        <div id="timeline" hidden>
+          <p class="timeline-legend"><span><i class="segment waiting"></i> Queued</span><span><i class="segment processing"></i> Processing</span></p>
+          <p class="muted timeline-caption">Elapsed from the first job shown</p>
+          <div class="timeline-scroll" tabindex="0" role="region" aria-label="Job timing chart">
+            <div class="timeline-grid">
+              <span aria-hidden="true"></span>
+              <div class="timeline-axis" aria-hidden="true" id="timeline-axis"></div>
+              <div class="timeline-rows" id="timeline-rows"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="deadlock-heading">
+        <h2 id="deadlock-heading">Deadlock solver</h2>
+        <dl class="solver-details">
+          <dt>Detection type</dt><dd id="deadlock-type">Waiting for server</dd>
+          <dt>Recovery</dt><dd id="deadlock-recovery">Waiting for server</dd>
+          <dt>Cycles detected</dt><dd id="deadlocks">-</dd>
+        </dl>
+        <p id="last-cycle" role="status" hidden></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

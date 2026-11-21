@@ -1,5 +1,7 @@
 # BuildQueue
 
+For the current live batch checksum manager and Qt desktop app, see [BuildQueue Live](live/README.md). From this folder on Linux or Ubuntu under WSL2, use `sh run.sh` to build and open the desktop app.
+
 ### An Intelligent Local Job & Resource Management System
 
 
