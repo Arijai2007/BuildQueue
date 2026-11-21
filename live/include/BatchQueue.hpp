@@ -1,0 +1,90 @@
+#pragma once
+
+#include "Checksum.hpp"
+#include "Semaphore.hpp"
+
+#include <condition_variable>
+#include <functional>
+#include <mutex>
+#include <thread>
+
+namespace bq {
+enum class Policy { Fcfs, Priority, Sjf };
+enum class Input { FolderNames, AbsolutePaths };
+enum class State { Queued, Running, Completed, Failed, Cancelled };
+
+struct JobRequest {
+    std::string file;
+    int priority;
+};
+
+struct Job {
+    using Clock = std::chrono::steady_clock;
+
+    std::uint64_t id = 0;
+    std::uint64_t dispatchOrder = 0;
+    Policy dispatchPolicy = Policy::Fcfs;
+    std::string file;
+    int priority = 0;
+    std::optional<std::uintmax_t> estimatedBytes;
+    State state = State::Queued;
+    Clock::time_point submitted;
+    Clock::time_point started;
+    Clock::time_point finished;
+    ChecksumResult result;
+};
+
+struct Snapshot {
+    std::vector<Job> jobs;
+    int workers;
+    int slots;
+    int running;
+    int peak;
+    Policy policy;
+    DeadlockReport deadlocks;
+};
+
+class BatchQueue {
+public:
+    using Work = std::function<ChecksumResult(const std::string&)>;
+    using Estimate = std::function<std::optional<std::uintmax_t>(const std::string&)>;
+
+    BatchQueue(int workers, int slots, Work work, Input input = Input::FolderNames,
+               Estimate estimate = {});
+    ~BatchQueue();
+    BatchQueue(const BatchQueue&) = delete;
+    BatchQueue& operator=(const BatchQueue&) = delete;
+
+    void setPolicy(Policy policy);
+    std::vector<std::uint64_t> submit(const std::vector<std::string>& files, int priority);
+    std::vector<std::uint64_t> submit(const std::vector<JobRequest>& requests);
+    bool cancel(std::uint64_t id);
+    void clearFinished();
+    Snapshot snapshot() const;
+    void waitUntilIdle();
+
+private:
+    void worker();
+    void stop();
+    std::vector<Job>::iterator nextJob();
+    static bool terminal(State state);
+
+    const int slots_;
+    const Input input_;
+    Work work_;
+    Estimate estimate_;
+    DeadlockDetector detector_;
+    Semaphore permits_;
+    mutable TrackedMutex mutex_;
+    std::condition_variable_any changed_;
+    std::vector<std::thread> workers_;
+    std::vector<Job> jobs_;
+    Policy policy_ = Policy::Fcfs;
+    std::uint64_t nextId_ = 1;
+    std::uint64_t nextDispatch_ = 1;
+    int queued_ = 0;
+    int running_ = 0;
+    int peak_ = 0;
+    bool stopping_ = false;
+};
+}

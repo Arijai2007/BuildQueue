@@ -1,0 +1,27 @@
+name: Live checksum tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: live
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: make test
+      - name: Check dashboard script
+        run: node --check web/js/app.js
+      - name: Build Qt desktop app
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev
+          sh -n run.sh
+          ./run.sh --build-only
+      - name: Smoke-test Qt window
+        run: |
+          status=0
+          QT_QPA_PLATFORM=offscreen timeout 5s ./build-qt/buildqueue-qt || status=$?
+          test "$status" -eq 124
