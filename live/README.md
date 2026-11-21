@@ -2,9 +2,9 @@
 
 BuildQueue is a C++17 Linux application for calculating checksums of batches of local files. Select files in the Qt desktop app or browser dashboard, or submit them through the command line. A persistent thread pool schedules each file, and a counting semaphore limits how many checksum processes can run at once.
 
-## Setup
+## Browser dashboard
 
-See [readme.txt](readme.txt) for installation. From the project directory on Linux or Ubuntu under WSL2:
+From the `live/` directory on Linux or Ubuntu under WSL2, build and start the server:
 
 ```sh
 make -j2
@@ -17,10 +17,11 @@ Open [http://127.0.0.1:8081](http://127.0.0.1:8081), select files and choose **Q
 
 ## Qt desktop app
 
-On Ubuntu (including WSL2 with WSLg), install Qt 6 Widgets and CMake, then build from the project root:
+On Ubuntu (including WSL2 with WSLg), install Qt 6 Widgets and CMake, then run the launcher from the repository root or the `live/` directory:
 
 ```sh
-sudo apt install build-essential cmake qt6-base-dev coreutils
+sudo apt update
+sudo apt install -y build-essential cmake qt6-base-dev coreutils
 sh run.sh
 ```
 
@@ -32,7 +33,9 @@ The desktop app shares the C++ scheduler, semaphore, process launcher, and deadl
 
 To compare algorithms, add files of varied sizes, let the batch finish, choose a different scheduling policy, and click **Rerun batch**. BuildQueue runs the same files again with their original priorities. Use **Show previous batch** to compare the timelines and average wait times. The **Dispatch** column shows the actual start order and policy used for each job. With two execution slots, add at least three files so some jobs have to wait. For Priority comparisons, submit groups with different batch priorities before rerunning them.
 
-Use the CLI for a batch without the browser:
+## Command line
+
+From the `live/` directory, run a batch using the binary built with `make`:
 
 ```sh
 ./buildqueue --input input --file example.txt

@@ -1,10 +1,32 @@
 # BuildQueue
 
-For the current live batch checksum manager and Qt desktop app, see [BuildQueue Live](live/README.md). From this folder on Linux or Ubuntu under WSL2, use `sh run.sh` to build and open the desktop app.
+BuildQueue Live is a C++17 file checksum queue for Linux and Ubuntu under WSL2 with WSLg. The Qt desktop app runs real checksum jobs and shows which jobs ran, when they started, and how long they waited.
 
-### An Intelligent Local Job & Resource Management System
+## Run the Qt app
 
+Install the dependencies once on Ubuntu:
 
+```sh
+sudo apt update
+sudo apt install -y build-essential cmake qt6-base-dev coreutils
+```
+
+From the repository root, build and open the app:
+
+```sh
+sh run.sh
+```
+
+## Compare scheduling algorithms
+
+1. Use **Add files** or drag files into the window. In WSL, Windows files are under `/mnt/c`.
+2. Start with **FCFS**, the default. Choose at least three files of different sizes so at least one job waits for a slot.
+3. After the batch finishes, choose **SJF** or **Priority** and click **Rerun batch**. For a Priority comparison, first submit groups with different priorities. `0` is highest.
+4. Use **Show previous batch** to compare dispatch order, the timeline, and average wait. SJF estimates job length from file size.
+
+See the [BuildQueue Live documentation](live/README.md) for the browser and CLI, the deadlock detector, and how to run the tests.
+
+## Original scheduler and simulation
 
 BuildQueue connects CPU scheduling, contiguous memory allocation, semaphore admission, persistent worker threads, POSIX processes, and performance reporting in one local application. Its deterministic coordinator makes scheduling experiments reproducible; the offline Control Center makes each resource decision visible. A second, explicitly live mode executes real worker tasks and a bounded, predefined file checksum process.
 
