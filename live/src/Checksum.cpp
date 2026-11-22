@@ -5,6 +5,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <limits>
+#include <poll.h>
 #include <signal.h>
 #include <spawn.h>
 #include <sstream>
@@ -127,7 +128,7 @@ ChecksumResult Checksum::runPath(const std::filesystem::path& path,
 }
 
 ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds timeout,
-                                  std::uint64_t addressSpaceBytes, BufferPool& pool) {
+                                  std::uint64_t addressSpaceBytes, BufferPool& pool) try {
     ChecksumResult result;
     Descriptor input(descriptor);
     if (input.get() < 0) {
@@ -140,7 +141,10 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
         return result;
     }
     const auto chunk = std::clamp<std::uintmax_t>(info.st_size, 4096, BufferPool::maxBuffer);
-    auto buffer = pool.acquire(chunk);
+    const auto deadline = BufferPool::Clock::now() + timeout;
+    auto buffer = pool.acquire(chunk, deadline);
+    if (BufferPool::Clock::now() >= deadline)
+        throw BufferPool::WaitTimeout();
     int streamEnds[2];
     if (::socketpair(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0, streamEnds) != 0) {
         result.error = "Could not create the checksum input stream.";
@@ -184,7 +188,6 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
     childInput.close();
     result.pid = pid;
     result.addressSpaceLimitBytes = addressSpaceBytes;
-    const auto deadline = std::chrono::steady_clock::now() + timeout;
     int status = 0;
     struct rusage usage {};
     std::size_t sent = 0, pending = 0;
@@ -237,7 +240,13 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
                 continue;
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        if (feed.get() >= 0 && sent < pending) {
+            pollfd inputWritable{feed.get(), POLLOUT, 0};
+            if (::poll(&inputWritable, 1, 5) < 0 && errno != EINTR)
+                result.error = "Could not wait for checksum input to become writable.";
+        } else {
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        }
     }
 
     result.exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
@@ -270,6 +279,11 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
         return result;
     }
     result.checksum = static_cast<std::uint32_t>(checksum);
+    return result;
+} catch (const BufferPool::WaitTimeout& error) {
+    ChecksumResult result;
+    result.exitCode = 124;
+    result.error = error.what();
     return result;
 }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <chrono>
 #include <condition_variable>
 #include <cstddef>
 #include <mutex>
@@ -12,6 +13,11 @@ enum class Fit { First, Best, Worst };
 
 class BufferPool {
 public:
+    using Clock = std::chrono::steady_clock;
+    class WaitTimeout : public std::runtime_error {
+    public:
+        WaitTimeout() : std::runtime_error("Timed out waiting for a checksum buffer.") {}
+    };
     static constexpr std::size_t maxBuffer = 256 * 1024;
     struct Block {
         std::size_t offset, size;
@@ -49,12 +55,12 @@ public:
         std::lock_guard<std::mutex> guard(mutex_);
         fit_ = fit;
     }
-    Lease acquire(std::size_t requested) {
+    Lease acquire(std::size_t requested, Clock::time_point deadline = Clock::time_point::max()) {
         if (!requested || requested > storage_.size())
             throw std::invalid_argument("Invalid buffer size");
         std::unique_lock<std::mutex> lock(mutex_);
         std::size_t index;
-        available_.wait(lock, [&] {
+        const auto hasBlock = [&] {
             index = blocks_.size();
             for (std::size_t i = 0; i < blocks_.size(); ++i) {
                 const auto& block = blocks_[i];
@@ -68,7 +74,11 @@ public:
                     break;
             }
             return index < blocks_.size();
-        });
+        };
+        if (deadline == Clock::time_point::max())
+            available_.wait(lock, hasBlock);
+        else if (!available_.wait_until(lock, deadline, hasBlock))
+            throw WaitTimeout();
         const auto block = blocks_[index];
         if (block.size > requested)
             blocks_.insert(blocks_.begin() + index + 1,

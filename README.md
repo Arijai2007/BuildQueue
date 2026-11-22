@@ -8,7 +8,7 @@ Install the dependencies once on Ubuntu:
 
 ```sh
 sudo apt update
-sudo apt install -y build-essential cmake qt6-base-dev coreutils
+sudo apt install -y build-essential cmake qt6-base-dev coreutils util-linux
 ```
 
 From the repository root, build and open the app:
@@ -23,6 +23,8 @@ sh run.sh
 2. Start with **FCFS**, the default. Choose at least three files of different sizes so at least one job waits for a slot.
 3. After the batch finishes, choose **SJF** or **Priority** and click **Rerun batch**. For a Priority comparison, first submit groups with different priorities. `0` is highest.
 4. Use **Show previous batch** to compare dispatch order, the timeline, and average wait. SJF estimates job length from file size.
+
+Use **Compare all policies** to run the same batch under all three schedulers. The desktop buffer panel shows the file-streaming pool, fragmentation, and coalescing.
 
 See the [BuildQueue Live documentation](live/README.md) for the browser and CLI, the deadlock detector, and how to run the tests.
 
