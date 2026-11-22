@@ -47,7 +47,7 @@ async function loadFiles() {
 }
 
 function time(ms) {
-  if (ms === null) return "-";
+  if (ms === null) return "—";
   return ms < 1000 ? `${ms.toFixed(1)} ms` : `${(ms / 1000).toFixed(2)} s`;
 }
 
@@ -117,13 +117,16 @@ function row(job) {
     detail.textContent = job.error;
     status.append(detail);
   }
-  const checksum = cell(job.checksum ?? "-", "numeric");
+  const checksum = cell(job.checksum ?? "—", "numeric");
   if (job.bytes !== null) {
     const detail = document.createElement("small");
     detail.textContent = `${job.bytes.toLocaleString()} B`;
     checksum.append(detail);
   }
-  cell(job.pid ?? "-", "numeric");
+  cell(job.pid ?? "—", "numeric");
+  const memory = cell(job.peak_rss_kib == null ? "-" : `${job.peak_rss_kib} KiB`, "numeric");
+  if (job.memory_limit_bytes != null)
+    memory.title = `Address-space limit: ${job.memory_limit_bytes / (1024 * 1024)} MiB`;
   cell(time(job.wait_ms), "numeric");
   cell(time(job.run_ms), "numeric");
   const action = cell("");
@@ -146,7 +149,7 @@ async function loadJobs() {
     const snapshot = await request("/api/jobs");
     if (version !== refreshVersion) return;
     el("connection").textContent = "Live";
-    el("slots").textContent = `${snapshot.running}/${snapshot.slots} slots active � Peak ${snapshot.peak} � ${snapshot.workers} workers`;
+    el("slots").textContent = `${snapshot.running}/${snapshot.slots} slots active · Peak ${snapshot.peak} · ${snapshot.workers} workers`;
     el("deadlock-type").textContent = snapshot.deadlocks.type;
     el("deadlock-recovery").textContent = snapshot.deadlocks.recovery;
     el("deadlocks").textContent = snapshot.deadlocks.detected;

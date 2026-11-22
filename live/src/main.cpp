@@ -80,6 +80,9 @@ json describe(const Snapshot& snapshot) {
             {"pid", job.result.pid < 0 ? json(nullptr) : json(job.result.pid)},
             {"exit_code", job.result.exitCode < 0 ? json(nullptr) : json(job.result.exitCode)},
             {"checksum", job.state == State::Completed ? json(job.result.checksum) : json(nullptr)},
+            {"memory_limit_bytes", job.result.addressSpaceLimitBytes
+                ? json(job.result.addressSpaceLimitBytes) : json(nullptr)},
+            {"peak_rss_kib", job.result.peakRssKiB ? json(*job.result.peakRssKiB) : json(nullptr)},
             {"bytes", job.state == State::Completed ? json(job.result.bytes) : json(nullptr)},
             {"error", job.result.error}
         });
@@ -217,7 +220,8 @@ void help() {
                  "  ./buildqueue --input DIR --file NAME [--file NAME ...]\n"
                  "  Both modes accept --workers 1..16, --slots 1..workers,\n"
                  "  and --policy fcfs|priority|sjf (default: fcfs).\n"
-                 "  SJF uses file size. CLI batches also accept --priority 0..9.\n";
+                 "  SJF uses file size. CLI batches also accept --priority 0..9.\n"
+                 "  --memory-mib 8..4096 caps each checksum process (default: 64).\n";
 }
 }
 
@@ -227,6 +231,7 @@ int main(int argc, char* argv[]) {
         std::filesystem::path web = "web";
         std::vector<std::string> files;
         int workers = 4, slots = 0, priority = 0, port = 8081;
+        int memoryMiB = defaultMemoryMiB;
         Policy policy = Policy::Fcfs;
         bool dashboard = false;
         if (argc == 1) {
@@ -246,6 +251,7 @@ int main(int argc, char* argv[]) {
             else if (option == "--file") files.push_back(arg());
             else if (option == "--workers") workers = number(arg(), 1, 16);
             else if (option == "--slots") slots = number(arg(), 1, 16);
+            else if (option == "--memory-mib") memoryMiB = number(arg(), 8, 4096);
             else if (option == "--priority") priority = number(arg(), 0, 9);
             else if (option == "--port") port = number(arg(), 1024, 65535);
             else if (option == "--policy") policy = readPolicy(arg());
@@ -257,7 +263,9 @@ int main(int argc, char* argv[]) {
 
         Checksum checksum(input);
         BatchQueue queue(workers, slots ? slots : std::min(workers, 2),
-                         [&](const auto& name) { return checksum.run(name); }, Input::FolderNames,
+                         [&](const auto& name) {
+                             return checksum.run(name, std::chrono::minutes(2), memoryMiB * bytesPerMiB);
+                         }, Input::FolderNames,
                          [&](const auto& name) { return checksum.size(name); });
         queue.setPolicy(policy);
         if (dashboard)

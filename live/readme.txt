@@ -3,10 +3,11 @@ BuildQueue | Live batch file-checksum manager
 Requirements
 - Linux, or Ubuntu under WSL2 on Windows
 - C++17 compiler, Make and GNU coreutils (/usr/bin/cksum)
+- util-linux (/usr/bin/prlimit) to set per-process memory limits
 - Python 3 for integration tests only
 
 Install on Debian or Ubuntu
-  sudo apt-get install build-essential coreutils python3
+  sudo apt-get install build-essential coreutils python3 util-linux
   make -j2
   make test
 

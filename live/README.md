@@ -17,11 +17,10 @@ Open [http://127.0.0.1:8081](http://127.0.0.1:8081), select files and choose **Q
 
 ## Qt desktop app
 
-On Ubuntu (including WSL2 with WSLg), install Qt 6 Widgets and CMake, then run the launcher from the repository root or the `live/` directory:
+On Ubuntu (including WSL2 with WSLg), install Qt 6 Widgets and CMake, then build from the project root:
 
 ```sh
-sudo apt update
-sudo apt install -y build-essential cmake qt6-base-dev coreutils
+sudo apt install build-essential cmake qt6-base-dev coreutils util-linux
 sh run.sh
 ```
 
@@ -33,6 +32,8 @@ The desktop app shares the C++ scheduler, semaphore, process launcher, and deadl
 
 To compare algorithms, add files of varied sizes, let the batch finish, choose a different scheduling policy, and click **Rerun batch**. BuildQueue runs the same files again with their original priorities. Use **Show previous batch** to compare the timelines and average wait times. The **Dispatch** column shows the actual start order and policy used for each job. With two execution slots, add at least three files so some jobs have to wait. For Priority comparisons, submit groups with different batch priorities before rerunning them.
 
+**Compare all policies** runs the current batch under FCFS, SJF, and Priority in three separate queues and shows measured average wait, total elapsed time, completed count, and dispatch order side by side. Choose one comparison slot to see a sequential dispatch order, or two to observe concurrent scheduling. Each run uses the same paths, priorities, slot count, memory limit, and buffer allocation policy. Timings can vary with filesystem caching and system load.
+
 ## Command line
 
 From the `live/` directory, run a batch using the binary built with `make`:
@@ -43,6 +44,14 @@ cksum input/example.txt
 ```
 
 Add multiple `--file` arguments to submit a batch. A batch exits with code 1 if any job fails. A custom dashboard port can be set with `--port`.
+
+## Process memory management
+
+Linux enforces a **64 MiB virtual address-space limit per checksum child** by default. Set **Process memory limit** in Qt to change the limit for jobs when their workers start. In the CLI or browser server, pass `--memory-mib 32` at startup. The accepted range is 8 to 4096 MiB.
+
+BuildQueue sets both the soft and hard limits with `prlimit --as` before executing `cksum`. On exit, Linux reports the child's **peak resident set size (RSS)** in KiB. The Qt and browser tables show that reading and the configured limit in a tooltip. The CLI and API report `peak_rss_kib` and `memory_limit_bytes`. The address-space limit controls virtual memory; peak RSS measures resident memory. These figures cover each checksum child.
+
+The checksum workers also stream the actual input bytes through a shared **512 KiB buffer pool** before sending them to the child process. Each job uses a contiguous buffer sized from 4 to 256 KiB and reuses it for successive reads. In Qt, choose **First Fit**, **Best Fit**, or **Worst Fit**. The main queue shows free and used block ranges, largest free block, peak usage, external fragmentation and coalescing count. Released buffers merge with adjacent free blocks. Peak fragmentation and the coalescing count remain visible after fast jobs finish. Browser and CLI use First Fit.
 
 ## How it works
 
@@ -69,7 +78,7 @@ The dashboard binds to `127.0.0.1`. Files must be regular entries directly insid
 make test
 ```
 
-The C++ tests cover real checksum subprocesses, path validation, deterministic scheduling order and slot limits. The HTTP test checks the CLI, served dashboard, job submission, live results and failure reporting. CMake and CTest are also supported on Linux.
+The C++ tests cover real checksum subprocesses, path validation, deterministic scheduling order, slot limits, buffer placement, fragmentation, coalescing and multi-chunk streaming. The HTTP test checks the CLI, served dashboard, job submission, live results and failure reporting. CMake and CTest are also supported on Linux.
 
 Run `make test-deadlock` to demonstrate detection with two real threads and two tracked mutexes. Both threads acquire their first lock, then request the other thread's lock. The detector rejects the request that closes the cycle. Stack unwinding releases the rejected thread's first lock, letting the other thread finish. Ordinary checksum jobs acquire the queue and semaphore locks in a consistent order, so the dashboard should normally show zero cycles. The detector covers instrumented mutexes inside BuildQueue. The checksum process timeout separately handles stalled child processes.
 
