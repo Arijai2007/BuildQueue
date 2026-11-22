@@ -41,6 +41,8 @@ def main():
         command = [str(binary), "--input", directory]
         result = subprocess.run(command + ["--file", file.name], capture_output=True, check=True, timeout=10)
         cli_job = json.loads(result.stdout)["jobs"][0]
+        assert cli_job["memory_limit_bytes"] == 64 * 1024 * 1024
+        assert isinstance(cli_job["peak_rss_kib"], int) and cli_job["peak_rss_kib"] >= 0
         assert json.loads(result.stdout)["policy"] == "fcfs"
         assert cli_job["state"] == "Completed"
         assert cli_job["checksum"] == int(expected[0])
@@ -92,6 +94,8 @@ def main():
                 assert jobs[0]["estimated_bytes"] == int(expected[1])
                 assert jobs[2]["estimated_bytes"] is None
                 assert jobs[0]["pid"] > 0 and jobs[0]["exit_code"] == 0
+                assert jobs[0]["memory_limit_bytes"] == 64 * 1024 * 1024
+                assert isinstance(jobs[0]["peak_rss_kib"], int)
                 assert jobs[0]["wait_ms"] >= 0 and jobs[0]["run_ms"] >= 0
                 assert jobs[0]["submitted_ms"] == 0
                 assert all(job["submitted_ms"] >= 0 for job in jobs)

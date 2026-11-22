@@ -4,6 +4,9 @@
 #include <QApplication>
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QCloseEvent>
+#include <QComboBox>
+#include <QDialog>
 #include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -29,12 +32,14 @@
 #include <QWidget>
 
 #include <algorithm>
+#include <atomic>
+#include <future>
 
 namespace {
 using namespace bq;
 using Clock = Job::Clock;
 
-enum Column { File, Status, Size, Priority, Dispatch, Crc, Pid, Wait, Run, Timeline, Columns };
+enum Column { File, Status, Size, Priority, Dispatch, Crc, Pid, Memory, Wait, Run, Timeline, Columns };
 enum Role { JobId = Qt::UserRole, Start, Queued, Processing };
 
 double milliseconds(Clock::duration duration) {
@@ -147,8 +152,41 @@ public:
     }
 };
 
+struct Comparison {
+    Policy policy;
+    std::vector<Job> jobs;
+};
+
+std::vector<Comparison> comparePolicies(const std::vector<JobRequest>& requests, int slots,
+                                        int memoryMiB, Fit fit) {
+    BufferPool buffers;
+    buffers.setFit(fit);
+    std::vector<Comparison> results;
+    for (auto policy : {Policy::Fcfs, Policy::Sjf, Policy::Priority}) {
+        BatchQueue queue(slots, slots, [&](const std::string& path) {
+            return Checksum::runPath(path, std::chrono::minutes(2), memoryMiB * bytesPerMiB, &buffers);
+        }, Input::AbsolutePaths, [](const std::string& path) { return Checksum::pathSize(path); });
+        queue.setPolicy(policy);
+        // Submit all jobs together so every policy sees the same initial queue.
+        queue.submit(requests);
+        queue.waitUntilIdle();
+        auto jobs = queue.snapshot().jobs;
+        std::sort(jobs.begin(), jobs.end(), [](const Job& a, const Job& b) {
+            return a.dispatchOrder < b.dispatchOrder;
+        });
+        results.push_back({policy, std::move(jobs)});
+    }
+    return results;
+}
+
 class Desktop : public QWidget {
-    BatchQueue queue_{4, 2, [](const std::string& file) { return Checksum::runPath(file); },
+    std::atomic<int> memoryMiB_{defaultMemoryMiB};
+    BufferPool buffers_;
+    Fit fit_ = Fit::First;
+    BatchQueue queue_{4, 2, [this](const std::string& file) {
+                          return Checksum::runPath(file, std::chrono::minutes(2),
+                                                   memoryMiB_.load() * bytesPerMiB, &buffers_);
+                      },
                       Input::AbsolutePaths, [](const std::string& file) { return Checksum::pathSize(file); }};
     QTableWidget* table_ = new QTableWidget(this);
     QLabel* summary_ = new QLabel(this);
@@ -158,6 +196,10 @@ class Desktop : public QWidget {
     QLabel* priorityLabel_ = new QLabel("Batch priority", this);
     QSpinBox* priority_ = new QSpinBox(this);
     QPushButton* replay_ = new QPushButton("Rerun batch", this);
+    QPushButton* compare_ = new QPushButton("Compare all policies", this);
+    QSpinBox* compareSlots_ = new QSpinBox(this);
+    QLabel* poolInfo_ = new QLabel(this);
+    std::future<std::vector<Comparison>> comparison_;
     QCheckBox* showEarlier_ = new QCheckBox("Show previous batch", this);
     QStatusBar* status_ = new QStatusBar(this);
     QFileDialog* picker_ = nullptr;
@@ -262,11 +304,42 @@ public:
         showEarlier_->setToolTip("Compare the previous batch on its own elapsed-time scale.");
         historyControls->addWidget(showEarlier_);
         historyControls->addStretch();
+        auto* memoryLimit = new QSpinBox(this);
+        memoryLimit->setRange(8, 4096);
+        memoryLimit->setValue(defaultMemoryMiB);
+        memoryLimit->setSuffix(" MiB");
+        memoryLimit->setAccessibleName("Address-space limit per process");
+        memoryLimit->setToolTip("Linux applies this virtual address-space limit to checksum jobs as they start.");
+        historyControls->addWidget(new QLabel("Process memory limit", this));
+        historyControls->addWidget(memoryLimit);
+        connect(memoryLimit, &QSpinBox::valueChanged, this, [this](int value) { memoryMiB_.store(value); });
         layout->addLayout(historyControls);
+        auto* experiments = new QHBoxLayout;
+        experiments->addWidget(compare_);
+        experiments->addWidget(new QLabel("Comparison slots", this));
+        compareSlots_->setRange(1, 2);
+        compareSlots_->setAccessibleName("Execution slots for policy comparison");
+        experiments->addWidget(compareSlots_);
+        experiments->addStretch();
+        experiments->addWidget(new QLabel("Buffer allocation", this));
+        auto* fits = new QComboBox(this);
+        fits->setAccessibleName("Buffer allocation strategy");
+        fits->addItems({"First Fit", "Best Fit", "Worst Fit"});
+        experiments->addWidget(fits);
+        layout->addLayout(experiments);
+        poolInfo_->setWordWrap(true);
+        poolInfo_->setObjectName("summary");
+        layout->addWidget(poolInfo_);
+        connect(fits, &QComboBox::currentIndexChanged, this, [this](int index) {
+            fit_ = static_cast<Fit>(index);
+            buffers_.setFit(fit_);
+            refresh();
+        });
+        connect(compare_, &QPushButton::clicked, this, [this] { startComparison(); });
 
         table_->setColumnCount(Columns);
         table_->setHorizontalHeaderLabels({"File", "Status", "Size (B)", "Priority", "Dispatch", "CRC checksum",
-                                           "PID", "Wait", "Run", "Timeline"});
+                                           "PID", "Peak RSS", "Wait", "Run", "Timeline"});
         table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
         table_->setSelectionMode(QAbstractItemView::SingleSelection);
         table_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -305,13 +378,25 @@ public:
         connect(replay_, &QPushButton::clicked, this, [this] { rerunBatch(); });
         connect(showEarlier_, &QCheckBox::toggled, this, [this] { refresh(); });
         auto* timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, [this] { refresh(); });
+        connect(timer, &QTimer::timeout, this, [this] {
+            finishComparison();
+            refresh();
+        });
         timer->start(300);
         choosePolicy(Policy::Fcfs);
         refresh();
     }
 
 protected:
+    void closeEvent(QCloseEvent* event) override {
+        if (comparison_.valid()) {
+            status_->showMessage("Wait for the scheduling comparison to finish before closing.", 5000);
+            event->ignore();
+            return;
+        }
+        QWidget::closeEvent(event);
+    }
+
     void dragEnterEvent(QDragEnterEvent* event) override {
         const auto urls = event->mimeData()->urls();
         if (std::any_of(urls.cbegin(), urls.cend(), [](const QUrl& url) { return url.isLocalFile(); }))
@@ -330,6 +415,77 @@ protected:
     }
 
 private:
+    void startComparison() {
+        if (comparison_.valid())
+            return;
+        const auto snapshot = queue_.snapshot();
+        std::vector<JobRequest> batch;
+        for (const auto& job : snapshot.jobs)
+            if (job.id >= firstCurrentJob_ && job.state != State::Cancelled)
+                batch.push_back({job.file, job.priority});
+        if (batch.empty() || batch.size() > 100)
+            return;
+        try {
+            comparison_ = std::async(std::launch::async, comparePolicies, std::move(batch),
+                                     compareSlots_->value(), memoryMiB_.load(), fit_);
+            compare_->setEnabled(false);
+            status_->showMessage("Running FCFS, SJF and Priority on the current batch…");
+        } catch (const std::exception& error) {
+            status_->showMessage(QString::fromUtf8(error.what()), 7000);
+        }
+    }
+
+    void finishComparison() {
+        if (!comparison_.valid() ||
+            comparison_.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+            return;
+        status_->clearMessage();
+        try {
+            showComparison(comparison_.get());
+        } catch (const std::exception& error) {
+            status_->showMessage(QString::fromUtf8(error.what()), 7000);
+        }
+    }
+
+    void showComparison(const std::vector<Comparison>& results) {
+        auto* dialog = new QDialog(this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->setWindowTitle("Measured scheduling comparison");
+        auto* layout = new QVBoxLayout(dialog);
+        auto* resultsTable = new QTableWidget(static_cast<int>(results.size()), 5, dialog);
+        resultsTable->setHorizontalHeaderLabels({"Policy", "Avg. wait", "Total elapsed", "Completed", "Dispatch order"});
+        resultsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        resultsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        resultsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+        resultsTable->setWordWrap(true);
+        for (int row = 0; row < resultsTable->rowCount(); ++row) {
+            const auto& result = results[row];
+            const auto origin = result.jobs.front().submitted;
+            double waits = 0, elapsed = 0;
+            int completed = 0;
+            QStringList order;
+            for (const auto& job : result.jobs) {
+                waits += milliseconds(job.started - job.submitted);
+                elapsed = std::max(elapsed, milliseconds(job.finished - origin));
+                completed += job.state == State::Completed;
+                order.append(QFileInfo(QFile::decodeName(job.file.c_str())).fileName());
+            }
+            const QStringList values{policyName(result.policy), duration(waits / result.jobs.size()),
+                duration(elapsed), QString("%1/%2").arg(completed).arg(static_cast<qulonglong>(result.jobs.size())),
+                order.join(" → ")};
+            for (int col = 0; col < values.size(); ++col)
+                resultsTable->setItem(row, col, new QTableWidgetItem(values[col]));
+            resultsTable->item(row, 4)->setToolTip(order.join("\n"));
+        }
+        layout->addWidget(resultsTable);
+        auto* close = new QPushButton("Close", dialog);
+        connect(close, &QPushButton::clicked, dialog, &QDialog::close);
+        layout->addWidget(close, 0, Qt::AlignRight);
+        dialog->resize(850, 310);
+        dialog->show();
+        resultsTable->resizeRowsToContents();
+    }
+
     void chooseFiles() {
         if (!picker_) {
             picker_ = new QFileDialog(this);
@@ -393,6 +549,10 @@ private:
     void enqueue(const QStringList& paths) {
         if (paths.isEmpty())
             return;
+        if (comparison_.valid()) {
+            status_->showMessage("Add files after the scheduling comparison finishes.", 5000);
+            return;
+        }
         std::vector<std::string> files;
         files.reserve(paths.size());
         for (const auto& path : paths) {
@@ -439,8 +599,25 @@ private:
         const bool busy = std::any_of(snapshot.jobs.begin(), snapshot.jobs.end(), [](const Job& job) {
             return job.state == State::Queued || job.state == State::Running;
         });
-        replay_->setEnabled(!busy && std::any_of(current, snapshot.jobs.end(),
+        replay_->setEnabled(!busy && !comparison_.valid() && std::any_of(current, snapshot.jobs.end(),
                                                 [](const Job& job) { return job.state != State::Cancelled; }));
+        const auto availableJobs = std::count_if(current, snapshot.jobs.end(),
+                                                [](const Job& job) { return job.state != State::Cancelled; });
+        compare_->setEnabled(!busy && !comparison_.valid() && availableJobs > 0 && availableJobs <= 100);
+        const auto pool = buffers_.stats();
+        QStringList blocks;
+        for (const auto& block : pool.blocks)
+            blocks.append(QString("%1–%2 KiB %3")
+                .arg(static_cast<double>(block.offset) / 1024, 0, 'f', 1)
+                .arg(static_cast<double>(block.offset + block.size) / 1024, 0, 'f', 1)
+                .arg(block.used ? "used" : "free"));
+        poolInfo_->setText(QString("Buffer pool: %1 KiB free · largest free %2 KiB · peak used %3 KiB\n"
+                                   "Fragmentation %4% · peak %5% · coalesces %6\n%7")
+            .arg(static_cast<double>(pool.free) / 1024, 0, 'f', 1)
+            .arg(static_cast<double>(pool.largest) / 1024, 0, 'f', 1)
+            .arg(static_cast<double>(pool.peak) / 1024, 0, 'f', 1)
+            .arg(pool.fragmentation, 0, 'f', 1).arg(pool.peakFragmentation, 0, 'f', 1)
+            .arg(static_cast<qulonglong>(pool.merges)).arg(blocks.join(" | ")));
         const bool hasPrevious = previous != current;
         const bool viewingPrevious = hasPrevious && showEarlier_->isChecked();
         showEarlier_->setEnabled(hasPrevious);
@@ -494,10 +671,16 @@ private:
                 ? QString::number(static_cast<qulonglong>(*job.estimatedBytes)) : QString());
             cell(row, Priority, QString::number(job.priority));
             cell(row, Dispatch, times.started
-                ? QString("#%1 � %2").arg(static_cast<qulonglong>(job.dispatchOrder)).arg(policyName(job.dispatchPolicy))
+                ? QString("#%1 · %2").arg(static_cast<qulonglong>(job.dispatchOrder)).arg(policyName(job.dispatchPolicy))
                 : QString());
             cell(row, Crc, job.state == State::Completed ? QString::number(job.result.checksum) : QString());
             cell(row, Pid, job.result.pid > 0 ? QString::number(job.result.pid) : QString());
+            auto* memory = cell(row, Memory, job.result.peakRssKiB
+                ? QString("%1 KiB").arg(static_cast<qulonglong>(*job.result.peakRssKiB)) : QString());
+            memory->setToolTip(job.result.addressSpaceLimitBytes
+                ? QString("Peak resident memory. Address-space limit: %1 MiB.")
+                    .arg(static_cast<qulonglong>(job.result.addressSpaceLimitBytes / bytesPerMiB))
+                : QString());
             cell(row, Wait, duration(times.waiting));
             cell(row, Run, times.started ? duration(times.running) : QString());
             auto* bar = cell(row, Timeline, {});

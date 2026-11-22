@@ -9,6 +9,8 @@
 #include <spawn.h>
 #include <sstream>
 #include <stdexcept>
+#include <sys/resource.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <system_error>
@@ -99,7 +101,8 @@ std::optional<std::uintmax_t> Checksum::pathSize(const std::filesystem::path& pa
     return static_cast<std::uintmax_t>(info.st_size);
 }
 
-ChecksumResult Checksum::run(const std::string& name, std::chrono::milliseconds timeout) const {
+ChecksumResult Checksum::run(const std::string& name, std::chrono::milliseconds timeout,
+                             std::uint64_t addressSpaceBytes) const {
     ChecksumResult result;
     if (!validName(name)) {
         result.error = "Choose a file directly inside the configured input folder.";
@@ -107,20 +110,24 @@ ChecksumResult Checksum::run(const std::string& name, std::chrono::milliseconds 
     }
 
     return runInput(::openat(directory_, name.c_str(),
-                             O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC), timeout);
+                             O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC), timeout, addressSpaceBytes, pool_);
 }
 
 ChecksumResult Checksum::runPath(const std::filesystem::path& path,
-                                std::chrono::milliseconds timeout) {
+                                std::chrono::milliseconds timeout, std::uint64_t addressSpaceBytes,
+                                BufferPool* pool) {
     if (!path.is_absolute() || path.native().find('\0') != std::string::npos) {
         ChecksumResult result;
         result.error = "Choose a local file with an absolute path.";
         return result;
     }
-    return runInput(::open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC), timeout);
+    static BufferPool defaultPool;
+    return runInput(::open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC),
+                    timeout, addressSpaceBytes, pool ? *pool : defaultPool);
 }
 
-ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds timeout) {
+ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds timeout,
+                                  std::uint64_t addressSpaceBytes, BufferPool& pool) {
     ChecksumResult result;
     Descriptor input(descriptor);
     if (input.get() < 0) {
@@ -132,6 +139,15 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
         result.error = "Input must be a regular file.";
         return result;
     }
+    const auto chunk = std::clamp<std::uintmax_t>(info.st_size, 4096, BufferPool::maxBuffer);
+    auto buffer = pool.acquire(chunk);
+    int streamEnds[2];
+    if (::socketpair(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0, streamEnds) != 0) {
+        result.error = "Could not create the checksum input stream.";
+        return result;
+    }
+    Descriptor childInput(streamEnds[0]);
+    Descriptor feed(streamEnds[1]);
 
     int pipeEnds[2];
     if (::pipe2(pipeEnds, O_CLOEXEC) != 0) {
@@ -147,55 +163,97 @@ ChecksumResult Checksum::runInput(int descriptor, std::chrono::milliseconds time
     }
 
     SpawnActions actions;
-    actions.redirect(input.get(), STDIN_FILENO);
+    actions.redirect(childInput.get(), STDIN_FILENO);
     actions.redirect(writer.get(), STDOUT_FILENO);
     actions.redirect(nullOutput.get(), STDERR_FILENO);
-    char executable[] = "/usr/bin/cksum";
+    char executable[] = "/usr/bin/prlimit";
+    auto limit = "--as=" + std::to_string(addressSpaceBytes) + ':' + std::to_string(addressSpaceBytes);
+    char separator[] = "--";
+    char checksumProgram[] = "/usr/bin/cksum";
     char locale[] = "LC_ALL=C";
-    char* argv[] = {executable, nullptr};
+    char* argv[] = {executable, limit.data(), separator, checksumProgram, nullptr};
     char* env[] = {locale, nullptr};
     pid_t pid;
     int error = ::posix_spawn(&pid, executable, actions.get(), nullptr, argv, env);
     if (error) {
-        result.error = std::string("Could not start cksum: ") + std::strerror(error);
+        result.error = std::string("Could not start prlimit: ") + std::strerror(error);
         return result;
     }
 
     writer.close();
+    childInput.close();
     result.pid = pid;
+    result.addressSpaceLimitBytes = addressSpaceBytes;
     const auto deadline = std::chrono::steady_clock::now() + timeout;
     int status = 0;
+    struct rusage usage {};
+    std::size_t sent = 0, pending = 0;
     while (true) {
-        auto waited = ::waitpid(pid, &status, WNOHANG);
-        if (waited == pid)
+        auto waited = ::wait4(pid, &status, WNOHANG, &usage);
+        if (waited == pid) {
+            result.peakRssKiB = usage.ru_maxrss;
             break;
+        }
         if (waited < 0 && errno != EINTR) {
             result.error = std::string("Could not wait for cksum: ") + std::strerror(errno);
             return result;
         }
-        if (std::chrono::steady_clock::now() >= deadline) {
+        const bool timedOut = std::chrono::steady_clock::now() >= deadline;
+        if (timedOut || !result.error.empty()) {
             ::kill(pid, SIGKILL);
-            while (::waitpid(pid, &status, 0) < 0 && errno == EINTR) {}
-            result.exitCode = 124;
-            result.error = "Checksum process timed out.";
+            do {
+                waited = ::wait4(pid, &status, 0, &usage);
+            } while (waited < 0 && errno == EINTR);
+            if (waited == pid)
+                result.peakRssKiB = usage.ru_maxrss;
+            result.exitCode = timedOut ? 124 : 1;
+            if (timedOut)
+                result.error = "Checksum process timed out.";
             return result;
+        }
+        if (feed.get() >= 0 && sent == pending) {
+            const auto count = ::read(input.get(), buffer.data(), buffer.size());
+            if (count == 0)
+                feed.close();
+            else if (count > 0) {
+                sent = 0;
+                pending = static_cast<std::size_t>(count);
+            } else if (errno != EINTR) {
+                result.error = "Could not read checksum input.";
+                continue;
+            }
+        }
+        if (feed.get() >= 0 && sent < pending) {
+            const auto count = ::send(feed.get(), buffer.data() + sent, pending - sent,
+                                      MSG_DONTWAIT | MSG_NOSIGNAL);
+            if (count > 0) {
+                sent += static_cast<std::size_t>(count);
+                continue;
+            }
+            if (count < 0 && errno == EPIPE)
+                feed.close();
+            else if (count < 0 && errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
+                result.error = "Could not send input to the checksum process.";
+                continue;
+            }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
     result.exitCode = WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
     if (result.exitCode != 0) {
-        result.error = "cksum failed with exit " + std::to_string(result.exitCode) + ".";
+        result.error = "Checksum job failed with exit " + std::to_string(result.exitCode) +
+                       " under a " + std::to_string(addressSpaceBytes) + "-byte address-space limit.";
         return result;
     }
 
     // With standard input and no filename arguments, cksum writes just two integers.
     std::string output;
-    char buffer[128];
+    char outputChunk[128];
     for (;;) {
-        auto count = ::read(reader.get(), buffer, sizeof(buffer));
+        auto count = ::read(reader.get(), outputChunk, sizeof(outputChunk));
         if (count > 0)
-            output.append(buffer, static_cast<std::size_t>(count));
+            output.append(outputChunk, static_cast<std::size_t>(count));
         else if (count == 0)
             break;
         else if (errno != EINTR) {

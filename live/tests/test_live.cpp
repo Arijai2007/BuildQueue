@@ -29,6 +29,39 @@ struct Fixture {
     }
 };
 
+void bufferAllocation() {
+    for (const auto fit : {Fit::First, Fit::Best, Fit::Worst}) {
+        BufferPool pool(52);
+        pool.setFit(fit);
+        char* start = nullptr;
+        {
+            auto separator = [&] {
+                auto first = pool.acquire(12);
+                start = first.data();
+                return pool.acquire(4);
+            }();
+            auto middle = [&] {
+                pool.setFit(Fit::Worst);
+                auto hole = pool.acquire(8);
+                return pool.acquire(4);
+            }();
+            const auto fragmented = pool.stats();
+            require(fragmented.free == 44 && fragmented.largest == 24 && fragmented.fragmentation > 0,
+                    "Released separated allocations should leave fragmented space.");
+            pool.setFit(fit);
+            auto selected = pool.acquire(8);
+            const auto expected = fit == Fit::First ? 0 : fit == Fit::Best ? 16 : 28;
+            require(selected.data() == start + expected, "Allocation strategy chose the wrong block.");
+            selected.data()[0] = 'x';
+            require(selected.size() == 8, "Expected the requested buffer size.");
+        }
+        const auto released = pool.stats();
+        require(released.blocks.size() == 1 && released.largest == 52 && released.merges > 0 &&
+                released.fragmentation == 0 && released.peakFragmentation > 0,
+                "Adjacent released buffers should coalesce.");
+    }
+}
+
 void checksumProcess() {
     Fixture fixture;
     std::ofstream(fixture.path / "empty file");
@@ -39,6 +72,13 @@ void checksumProcess() {
     require(listed.size() == 1 && listed.front().name == "empty file",
             "Catalog must include only regular files.");
     const auto result = checksum.run("empty file");
+    std::ofstream(fixture.path / "large", std::ios::binary) << std::string(600000, 'x');
+    BufferPool buffers;
+    const auto streamed = Checksum::runPath(fixture.path / "large", std::chrono::seconds(10),
+                                          defaultMemoryMiB * bytesPerMiB, &buffers);
+    require(streamed.exitCode == 0 && streamed.bytes == 600000 &&
+            buffers.stats().peak == BufferPool::maxBuffer && buffers.stats().free == 2 * BufferPool::maxBuffer,
+            "Checksum should stream a large file through a released pool buffer.");
     require(checksum.size("empty file") == 0 && Checksum::pathSize(fixture.path / "empty file") == 0,
             "Empty files should have a known zero-byte estimate.");
     require(!checksum.size("alias") && !Checksum::pathSize(fixture.path / "alias"),
@@ -46,6 +86,12 @@ void checksumProcess() {
     require(result.pid > 0 && result.exitCode == 0 && result.error.empty(),
             "Expected a real successful checksum process.");
     require(result.checksum == 4294967295U && result.bytes == 0, "Incorrect empty-file checksum.");
+    require(result.addressSpaceLimitBytes == defaultMemoryMiB * bytesPerMiB &&
+            result.peakRssKiB.has_value(), "Expected the applied memory limit and OS peak RSS.");
+    const auto blocked = checksum.run("empty file", std::chrono::seconds(5), 4096);
+    require(blocked.pid > 0 && blocked.addressSpaceLimitBytes == 4096 &&
+            blocked.exitCode > 0 && blocked.exitCode != 124 && !blocked.error.empty(),
+            "Linux should reject a checksum child that cannot start under its address-space limit.");
     require(!checksum.run("missing").error.empty(), "Missing file should fail.");
     require(!checksum.run("alias").error.empty(), "Symbolic link should fail.");
     require(!checksum.run("../file").error.empty(), "Relative path should fail.");
@@ -154,6 +200,7 @@ void concurrency() {
 
 int main() {
     try {
+        bufferAllocation();
         checksumProcess();
         scheduling(bq::Policy::Fcfs);
         scheduling(bq::Policy::Priority);
