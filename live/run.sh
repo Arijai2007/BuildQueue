@@ -8,7 +8,7 @@ fi
 
 cd "$(dirname "$0")"
 if ! command -v cmake >/dev/null 2>&1; then
-    printf 'Install the desktop build tools: sudo apt install build-essential cmake qt6-base-dev coreutils\n' >&2
+    printf 'Install the desktop build tools: sudo apt install build-essential cmake qt6-base-dev coreutils util-linux\n' >&2
     exit 1
 fi
 

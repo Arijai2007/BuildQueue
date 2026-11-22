@@ -51,7 +51,7 @@ Linux enforces a **64 MiB virtual address-space limit per checksum child** by de
 
 BuildQueue sets both the soft and hard limits with `prlimit --as` before executing `cksum`. On exit, Linux reports the child's **peak resident set size (RSS)** in KiB. The Qt and browser tables show that reading and the configured limit in a tooltip. The CLI and API report `peak_rss_kib` and `memory_limit_bytes`. The address-space limit controls virtual memory; peak RSS measures resident memory. These figures cover each checksum child.
 
-The checksum workers also stream the actual input bytes through a shared **512 KiB buffer pool** before sending them to the child process. Each job uses a contiguous buffer sized from 4 to 256 KiB and reuses it for successive reads. In Qt, choose **First Fit**, **Best Fit**, or **Worst Fit**. The main queue shows free and used block ranges, largest free block, peak usage, external fragmentation and coalescing count. Released buffers merge with adjacent free blocks. Peak fragmentation and the coalescing count remain visible after fast jobs finish. Browser and CLI use First Fit.
+The checksum workers also stream the actual input bytes through a shared **512 KiB buffer pool** before sending them to the child process. Each job uses a contiguous buffer sized from 4 to 256 KiB and reuses it for successive reads. A job's timeout includes time spent waiting for a buffer. In Qt, choose **First Fit**, **Best Fit**, or **Worst Fit**. The main queue shows free and used block ranges, largest free block, peak usage, external fragmentation and coalescing count. Released buffers merge with adjacent free blocks. Peak fragmentation and the coalescing count remain visible after fast jobs finish. Browser and CLI use First Fit.
 
 ## How it works
 

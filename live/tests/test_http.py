@@ -46,6 +46,15 @@ def main():
         assert json.loads(result.stdout)["policy"] == "fcfs"
         assert cli_job["state"] == "Completed"
         assert cli_job["checksum"] == int(expected[0])
+        large = root / "multichunk.bin"
+        large.write_bytes(bytes(range(256)) * 3200)
+        expected_large = subprocess.check_output(["cksum", str(large)]).split()
+        streamed = subprocess.run(command + ["--file", large.name], capture_output=True,
+                                  check=True, timeout=10)
+        streamed_job = json.loads(streamed.stdout)["jobs"][0]
+        assert streamed_job["checksum"] == int(expected_large[0])
+        assert streamed_job["bytes"] == int(expected_large[1])
+        large.unlink()
 
         with socket.socket() as listener:
             listener.bind(("127.0.0.1", 0))

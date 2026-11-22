@@ -79,6 +79,16 @@ void checksumProcess() {
     require(streamed.exitCode == 0 && streamed.bytes == 600000 &&
             buffers.stats().peak == BufferPool::maxBuffer && buffers.stats().free == 2 * BufferPool::maxBuffer,
             "Checksum should stream a large file through a released pool buffer.");
+    {
+        auto occupied = buffers.acquire(2 * BufferPool::maxBuffer);
+        const auto timedOut = Checksum::runPath(fixture.path / "large", std::chrono::milliseconds(30),
+                                               defaultMemoryMiB * bytesPerMiB, &buffers);
+        require(timedOut.exitCode == 124 && timedOut.pid < 0 &&
+                timedOut.error.find("checksum buffer") != std::string::npos,
+                "Waiting for a buffer should honor the job deadline without spawning a child.");
+    }
+    require(buffers.stats().free == 2 * BufferPool::maxBuffer,
+            "The pool should remain usable after a timed-out allocation.");
     require(checksum.size("empty file") == 0 && Checksum::pathSize(fixture.path / "empty file") == 0,
             "Empty files should have a known zero-byte estimate.");
     require(!checksum.size("alias") && !Checksum::pathSize(fixture.path / "alias"),

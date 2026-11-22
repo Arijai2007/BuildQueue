@@ -28,6 +28,7 @@ async function loadFiles() {
     const row = document.createElement("label");
     const box = document.createElement("input");
     box.type = "checkbox";
+    box.value = name;
     box.checked = selected.has(name);
     box.addEventListener("change", () => {
       if (box.checked) selected.add(name);
@@ -199,7 +200,7 @@ el("submit").addEventListener("click", () => perform(async () => {
     priority: Number(el("priority").value),
   });
   for (const name of names) selected.delete(name);
-  for (const box of el("files").querySelectorAll("input")) box.checked = false;
+  for (const box of el("files").querySelectorAll("input")) box.checked = selected.has(box.value);
   el("message").textContent = `Queued ${ids.length} job(s).`;
 }));
 el("policy").addEventListener("change", () => {
