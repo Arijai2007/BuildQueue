@@ -26,7 +26,13 @@ sh run.sh
 
 Run `sh run.sh` from the project folder each time you want to open the app. The script builds any changed files and launches the Qt window. An executable Git checkout also supports `./run.sh`.
 
-Click **Add files** and choose several files, or drag local files into the window. The desktop app queues the selected paths directly and reads each file when its worker starts. The file picker sidebar includes mounted Windows drives under `/mnt` and available shortcuts for your Windows profile. You can switch between **FCFS**, **SJF**, and **Priority** while the picker is open. In Priority mode, use the batch priority control to set a number from 0 (highest) to 9 before opening the selected files. The table shows size estimates, priorities, job states, checksums, process IDs, and elapsed times. The timeline uses amber for waiting and green for execution; overlapping green bars show concurrent jobs. The deadlock panel reports wait-for graph detections.
+Click **Add files** and choose several files, or drag local files into the window. The desktop app queues the selected paths directly and reads each file when its worker starts. The file picker sidebar includes mounted Windows drives under `/mnt` and available shortcuts for your Windows profile. You can switch between **FCFS**, **SJF**, and **Priority** while the picker is open. In Priority mode, use the batch priority control to set a number from 0 (highest) to 9 before opening the selected files. The table shows size estimates, priorities, job states, checksums, process IDs, and elapsed times. The timeline uses amber for waiting and teal for execution; overlapping teal bars show concurrent jobs. The deadlock panel reports wait-for graph detections.
+
+The left navigation groups the desktop app into three workspaces:
+
+- **Jobs** contains scheduling controls, queue actions, live metrics, and the timeline. Use **Show technical columns** for file size, priority, PID, and peak RSS.
+- **Compare policies** runs all three schedulers and keeps the results in the main window.
+- **Memory** contains the allocation policy, process memory limit, buffer map, block table, and deadlock status.
 
 The desktop app shares the C++ scheduler, semaphore, process launcher, and deadlock detector with the CLI and browser dashboard. It opens its own queue and does not require an HTTP server. The browser dashboard still uses its configured input folder.
 

@@ -6,7 +6,6 @@
 #include <QCheckBox>
 #include <QCloseEvent>
 #include <QComboBox>
-#include <QDialog>
 #include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -19,6 +18,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QStackedWidget>
 #include <QStatusBar>
 #include <QStyle>
 #include <QStyledItemDelegate>
@@ -132,24 +132,55 @@ public:
         background.text.clear();
         auto style = background.widget ? background.widget->style() : QApplication::style();
         style->drawControl(QStyle::CE_ItemViewItem, &background, painter, background.widget);
-        QRectF track = QRectF(option.rect).adjusted(6, 6, -6, -6);
+        QRectF track = QRectF(option.rect).adjusted(9, 12, -9, -12);
         if (track.isEmpty())
             return;
         painter->save();
         painter->setClipRect(track);
         painter->setRenderHint(QPainter::Antialiasing);
         painter->setPen(Qt::NoPen);
-        painter->setBrush(QColor("#e5edf2"));
+        painter->setBrush(QColor("#e9eef5"));
         painter->drawRoundedRect(track, 4, 4);
         auto left = track.left() + track.width() * index.data(Start).toDouble();
         auto waiting = track.width() * index.data(Queued).toDouble();
         auto running = track.width() * index.data(Processing).toDouble();
-        painter->setBrush(QColor("#c78332"));
+        painter->setBrush(QColor("#e0a124"));
         painter->drawRoundedRect(QRectF(left, track.top(), waiting, track.height()), 3, 3);
-        painter->setBrush(QColor("#18796b"));
+        painter->setBrush(QColor("#087f83"));
         painter->drawRoundedRect(QRectF(left + waiting, track.top(), running, track.height()), 3, 3);
         painter->restore();
     }
+};
+
+class PoolMap : public QWidget {
+public:
+    explicit PoolMap(QWidget* parent) : QWidget(parent) {
+        setFixedHeight(14);
+        setAccessibleName("Buffer pool block layout");
+    }
+
+    void setBlocks(const std::vector<BufferPool::Block>& blocks) {
+        blocks_ = blocks;
+        update();
+    }
+
+protected:
+    void paintEvent(QPaintEvent*) override {
+        if (blocks_.empty())
+            return;
+        QPainter painter(this);
+        const auto capacity = blocks_.back().offset + blocks_.back().size;
+        const auto scale = static_cast<double>(width()) / capacity;
+        painter.fillRect(rect(), QColor("#e7eafd"));
+        for (const auto& block : blocks_) {
+            if (block.used)
+                painter.fillRect(QRectF(block.offset * scale, 0, block.size * scale, height()),
+                                 QColor("#087f83"));
+        }
+    }
+
+private:
+    std::vector<BufferPool::Block> blocks_;
 };
 
 struct Comparison {
@@ -189,7 +220,15 @@ class Desktop : public QWidget {
                       },
                       Input::AbsolutePaths, [](const std::string& file) { return Checksum::pathSize(file); }};
     QTableWidget* table_ = new QTableWidget(this);
-    QLabel* summary_ = new QLabel(this);
+    QTableWidget* comparisonTable_ = new QTableWidget(this);
+    QTableWidget* memoryTable_ = new QTableWidget(this);
+    QLabel* comparisonInfo_ = new QLabel("Finish a batch in Jobs to compare all three policies.", this);
+    QLabel* queuedMetric_ = new QLabel(this);
+    QLabel* completedMetric_ = new QLabel(this);
+    QLabel* slotsMetric_ = new QLabel(this);
+    QLabel* waitMetric_ = new QLabel(this);
+    QStackedWidget* workspaces_ = new QStackedWidget(this);
+    QStackedWidget* jobResults_ = new QStackedWidget(this);
     QLabel* solver_ = new QLabel(this);
     QLabel* timelineScale_ = new QLabel(this);
     QLabel* policyHelp_ = new QLabel(this);
@@ -199,6 +238,7 @@ class Desktop : public QWidget {
     QPushButton* compare_ = new QPushButton("Compare all policies", this);
     QSpinBox* compareSlots_ = new QSpinBox(this);
     QLabel* poolInfo_ = new QLabel(this);
+    PoolMap* poolMap_ = new PoolMap(this);
     std::future<std::vector<Comparison>> comparison_;
     QCheckBox* showEarlier_ = new QCheckBox("Show previous batch", this);
     QStatusBar* status_ = new QStatusBar(this);
@@ -210,62 +250,147 @@ public:
     Desktop() {
         setWindowTitle("BuildQueue | Desktop checksum queue");
         setObjectName("dashboard");
-        resize(1160, 690);
+        resize(1200, 740);
         setAcceptDrops(true);
         setStyleSheet(R"(
-            QWidget#dashboard { background: #f0f4f7; color: #1a3445; }
-            QWidget#hero { background: #123545; border-radius: 14px; }
-            QWidget#hero QLabel { color: #d1e4ea; font-size: 14px; }
-            QLabel#heroTitle { color: #ffffff; font-size: 29px; font-weight: 700; }
+            QWidget#dashboard, QWidget[workspace="true"] { background: #f4f7fa; }
+            QWidget#rail { background: #132b42; border-radius: 9px; }
+            QWidget#rail QLabel { color: #ffffff; font-size: 20px; font-weight: 700; }
+            QLabel, QCheckBox { color: #18324a; font-size: 13px; }
+            QWidget[panel="true"] { background: #ffffff; border: 1px solid #d6e2ec; border-radius: 8px; }
+            QLabel#pageTitle { font-size: 25px; font-weight: 700; }
+            QLabel#sectionTitle { font-size: 15px; font-weight: 700; }
+            QWidget#queuedCard { border-left: 4px solid #e0a124; }
+            QWidget#completedCard { border-left: 4px solid #087f83; }
+            QWidget#slotsCard { border-left: 4px solid #3272d6; }
+            QWidget#waitCard { border-left: 4px solid #e27245; }
+            QLabel#metricLabel { font-weight: 600; }
+            QLabel#metricValue { font-size: 23px; font-weight: 700; }
             QPushButton {
-                padding: 7px 13px; color: #193c4e; background: #ffffff;
-                border: 1px solid #aebfc9; border-radius: 6px;
+                padding: 7px 13px; color: #244968; background: #ffffff;
+                border: 1px solid #c7d7e5; border-radius: 6px;
+                font-weight: 600;
             }
-            QPushButton:hover { background: #e6f4f0; }
-            QPushButton:disabled { color: #536c77; background: #e9eff2; }
-            QPushButton:focus { border-color: #18796b; }
-            QPushButton[policyChoice="true"]:checked, QPushButton#addFiles {
-                color: white; background: #106a5f; border-color: #106a5f; font-weight: 600;
+            QPushButton:hover { background: #e8f2ff; }
+            QPushButton:disabled { color: #617689; background: #f2f5f8; }
+            QPushButton:focus { border-color: #3272d6; }
+            QPushButton[policyChoice="true"]:checked, QPushButton#comparePolicies:enabled {
+                color: white; background: #1857ad; border-color: #1857ad;
             }
-            QPushButton#addFiles:hover { background: #177d70; }
-            QSpinBox { padding: 5px; }
+            QPushButton#addFiles { background: #1857ad; color: #ffffff; border-color: #1857ad; padding: 9px 20px; }
+            QPushButton#addFiles:hover { background: #2467bf; }
+            QWidget#rail QPushButton {
+                background: transparent; color: #dceaf5; text-align: left;
+                padding: 9px 11px; border: 1px solid transparent;
+            }
+            QWidget#rail QPushButton:hover { background: #21435e; }
+            QWidget#rail QPushButton:checked { background: #285879; color: #ffffff; }
+            QWidget#rail QPushButton:focus { border-color: #8cbdf0; }
+            QSpinBox, QComboBox {
+                color: #18324a; padding: 5px 8px; background: #f6fafe;
+                border: 1px solid #c7d7e5; border-radius: 6px;
+            }
+            QSpinBox:disabled, QLabel:disabled { color: #6e728a; }
             QTableWidget {
-                color: #203c4c; background: #ffffff; alternate-background-color: #f6f9fb;
-                border: 1px solid #c8d6de; selection-background-color: #d5ebe7;
-                selection-color: #133744;
+                color: #18324a; background: #ffffff; alternate-background-color: #f5f9fc;
+                border: 1px solid #d6e2ec; selection-background-color: #dcecff;
+                selection-color: #17344f;
             }
             QTableWidget::item { padding: 0 7px; }
             QHeaderView::section {
-                background: #e3edf1; color: #254759; border: 0;
-                border-bottom: 1px solid #c8d6de; padding: 8px 7px; font-weight: 600;
+                background: #e7eff6; color: #294c6b; border: 0;
+                border-bottom: 1px solid #d6e2ec; padding: 9px 7px; font-weight: 700;
             }
-            QLabel#summary, QLabel#solver {
-                background: #ffffff; border: 1px solid #d0dde3; border-radius: 8px;
-                padding: 11px; color: #244759;
-            }
-            QLabel#summary { font-weight: 600; }
-            QLabel#hint { color: #436171; }
+            QLabel#solver { color: #335878; background: #e3f0fa; padding: 8px 12px; border-radius: 6px; }
+            QLabel#hint { color: #45627b; }
+            QStatusBar { color: #335878; }
         )");
-        auto* layout = new QVBoxLayout(this);
-        layout->setContentsMargins(22, 22, 22, 12);
-        layout->setSpacing(12);
-        auto* hero = new QWidget(this);
-        hero->setObjectName("hero");
-        auto* heroLayout = new QHBoxLayout(hero);
-        heroLayout->setContentsMargins(22, 18, 22, 18);
-        auto* intro = new QVBoxLayout;
-        auto* heading = new QLabel("BuildQueue", hero);
-        heading->setObjectName("heroTitle");
-        intro->addWidget(heading);
-        intro->addWidget(new QLabel("File checksum queue", hero));
-        heroLayout->addLayout(intro);
-        heroLayout->addStretch();
-        auto* add = new QPushButton("Add files", hero);
+        auto* layout = new QHBoxLayout(this);
+        layout->setContentsMargins(14, 14, 14, 12);
+        layout->setSpacing(18);
+        auto* rail = new QWidget(this);
+        rail->setObjectName("rail");
+        rail->setAttribute(Qt::WA_StyledBackground);
+        rail->setFixedWidth(166);
+        auto* navigation = new QVBoxLayout(rail);
+        navigation->setContentsMargins(12, 17, 12, 12);
+        navigation->setSpacing(6);
+        navigation->addWidget(new QLabel("BuildQueue", rail));
+        navigation->addSpacing(14);
+        auto* pages = new QButtonGroup(this);
+        layout->addWidget(rail);
+        auto* body = new QVBoxLayout;
+        body->setSpacing(12);
+        layout->addLayout(body, 1);
+        auto* header = new QHBoxLayout;
+        auto* heading = new QLabel(this);
+        heading->setObjectName("pageTitle");
+        header->addWidget(heading);
+        header->addStretch();
+        auto* add = new QPushButton("Add files", this);
         add->setObjectName("addFiles");
         add->setToolTip("Browse local and mounted Windows drives, or drop files on the window.");
-        heroLayout->addWidget(add);
-        layout->addWidget(hero);
+        header->addWidget(add);
+        body->addLayout(header);
 
+        auto addWorkspace = [&](const QString& name) {
+            auto* page = new QWidget(workspaces_);
+            page->setProperty("workspace", true);
+            page->setAttribute(Qt::WA_StyledBackground);
+            auto* rows = new QVBoxLayout(page);
+            rows->setContentsMargins(0, 0, 0, 0);
+            rows->setSpacing(12);
+            const int index = workspaces_->addWidget(page);
+            auto* button = new QPushButton(name, rail);
+            button->setCheckable(true);
+            pages->addButton(button, index);
+            navigation->addWidget(button);
+            return rows;
+        };
+        auto* jobsRows = addWorkspace("Jobs");
+        auto* compareRows = addWorkspace("Compare policies");
+        auto* bufferRows = addWorkspace("Memory");
+        navigation->addStretch();
+        connect(pages, &QButtonGroup::idClicked, workspaces_, &QStackedWidget::setCurrentIndex);
+        auto showPage = [pages, heading](int index) {
+            auto* button = pages->button(index);
+            button->setChecked(true);
+            heading->setText(button->text());
+        };
+        connect(workspaces_, &QStackedWidget::currentChanged, this, showPage);
+        showPage(workspaces_->currentIndex());
+        body->addWidget(workspaces_, 1);
+
+        auto* metrics = new QHBoxLayout;
+        metrics->setSpacing(9);
+        auto addMetric = [&](const char* objectName, const QString& name, QLabel* value) {
+            auto* card = new QWidget(this);
+            card->setObjectName(objectName);
+            card->setProperty("panel", true);
+            card->setAttribute(Qt::WA_StyledBackground);
+            auto* stack = new QVBoxLayout(card);
+            stack->setContentsMargins(13, 7, 13, 7);
+            stack->setSpacing(2);
+            auto* label = new QLabel(name, card);
+            label->setObjectName("metricLabel");
+            value->setObjectName("metricValue");
+            value->setAccessibleName(name);
+            stack->addWidget(label);
+            stack->addWidget(value);
+            metrics->addWidget(card, 1);
+        };
+        addMetric("queuedCard", "Queued jobs", queuedMetric_);
+        addMetric("completedCard", "Completed jobs", completedMetric_);
+        addMetric("slotsCard", "Active slots", slotsMetric_);
+        addMetric("waitCard", "Average wait", waitMetric_);
+        jobsRows->addLayout(metrics);
+
+        auto* controlsPanel = new QWidget(this);
+        controlsPanel->setProperty("panel", true);
+        controlsPanel->setAttribute(Qt::WA_StyledBackground);
+        auto* controlRows = new QVBoxLayout(controlsPanel);
+        controlRows->setContentsMargins(12, 9, 12, 9);
+        controlRows->setSpacing(7);
         auto* controls = new QHBoxLayout;
         auto* policy = new QButtonGroup(this);
         auto addPolicy = [&](const QString& name, Policy value) {
@@ -276,7 +401,9 @@ public:
             controls->addWidget(button);
             return button;
         };
-        controls->addWidget(new QLabel("Scheduling", this));
+        auto* scheduling = new QLabel("Scheduling", this);
+        scheduling->setObjectName("sectionTitle");
+        controls->addWidget(scheduling);
         auto* fcfs = addPolicy("FCFS", Policy::Fcfs);
         fcfs->setAccessibleName("First come, first served");
         fcfs->setChecked(true);
@@ -290,46 +417,77 @@ public:
         controls->addWidget(priorityLabel_);
         controls->addWidget(priority_);
         controls->addStretch();
-        controls->addWidget(cancel);
-        controls->addWidget(clear);
-        layout->addLayout(controls);
+        controlRows->addLayout(controls);
         policyHelp_->setObjectName("hint");
         policyHelp_->setWordWrap(true);
-        layout->addWidget(policyHelp_);
-        summary_->setObjectName("summary");
-        layout->addWidget(summary_);
-        auto* historyControls = new QHBoxLayout;
+        controlRows->addWidget(policyHelp_);
         replay_->setToolTip("Rerun the current batch under the selected algorithm after all jobs finish.");
-        historyControls->addWidget(replay_);
         showEarlier_->setToolTip("Compare the previous batch on its own elapsed-time scale.");
-        historyControls->addWidget(showEarlier_);
-        historyControls->addStretch();
         auto* memoryLimit = new QSpinBox(this);
         memoryLimit->setRange(8, 4096);
         memoryLimit->setValue(defaultMemoryMiB);
         memoryLimit->setSuffix(" MiB");
         memoryLimit->setAccessibleName("Address-space limit per process");
         memoryLimit->setToolTip("Linux applies this virtual address-space limit to checksum jobs as they start.");
-        historyControls->addWidget(new QLabel("Process memory limit", this));
-        historyControls->addWidget(memoryLimit);
         connect(memoryLimit, &QSpinBox::valueChanged, this, [this](int value) { memoryMiB_.store(value); });
-        layout->addLayout(historyControls);
-        auto* experiments = new QHBoxLayout;
-        experiments->addWidget(compare_);
-        experiments->addWidget(new QLabel("Comparison slots", this));
+        jobsRows->addWidget(controlsPanel);
+
+        auto* memoryPanel = new QWidget(this);
+        memoryPanel->setProperty("panel", true);
+        memoryPanel->setAttribute(Qt::WA_StyledBackground);
+        auto* memoryRows = new QVBoxLayout(memoryPanel);
+        memoryRows->setContentsMargins(12, 8, 12, 8);
+        memoryRows->setSpacing(6);
+        auto* comparisonControls = new QHBoxLayout;
+        compare_->setObjectName("comparePolicies");
+        comparisonControls->addWidget(compare_);
+        comparisonControls->addWidget(new QLabel("Comparison slots", this));
         compareSlots_->setRange(1, 2);
         compareSlots_->setAccessibleName("Execution slots for policy comparison");
-        experiments->addWidget(compareSlots_);
-        experiments->addStretch();
-        experiments->addWidget(new QLabel("Buffer allocation", this));
+        comparisonControls->addWidget(compareSlots_);
+        comparisonControls->addStretch();
+        compareRows->addLayout(comparisonControls);
+        comparisonInfo_->setObjectName("hint");
+        comparisonInfo_->setTextFormat(Qt::PlainText);
+        comparisonInfo_->setWordWrap(true);
+        compareRows->addWidget(comparisonInfo_);
+        comparisonTable_->setColumnCount(5);
+        comparisonTable_->setHorizontalHeaderLabels(
+            {"Policy", "Avg. wait", "Total elapsed", "Completed", "Dispatch order"});
+        comparisonTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        comparisonTable_->verticalHeader()->hide();
+        comparisonTable_->setAlternatingRowColors(true);
+        comparisonTable_->setWordWrap(false);
+        comparisonTable_->setShowGrid(false);
+        comparisonTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        comparisonTable_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+        compareRows->addWidget(comparisonTable_, 1);
+        auto* memoryControls = new QHBoxLayout;
+        auto* memoryTitle = new QLabel("Checksum buffer pool", this);
+        memoryTitle->setObjectName("sectionTitle");
+        memoryRows->addWidget(memoryTitle);
+        memoryControls->addWidget(new QLabel("Allocation policy", this));
         auto* fits = new QComboBox(this);
         fits->setAccessibleName("Buffer allocation strategy");
         fits->addItems({"First Fit", "Best Fit", "Worst Fit"});
-        experiments->addWidget(fits);
-        layout->addLayout(experiments);
+        memoryControls->addWidget(fits);
+        memoryControls->addStretch();
+        memoryControls->addWidget(new QLabel("Process memory limit", this));
+        memoryControls->addWidget(memoryLimit);
+        memoryRows->addLayout(memoryControls);
+        memoryRows->addWidget(poolMap_);
         poolInfo_->setWordWrap(true);
-        poolInfo_->setObjectName("summary");
-        layout->addWidget(poolInfo_);
+        poolInfo_->setObjectName("hint");
+        memoryRows->addWidget(poolInfo_);
+        bufferRows->addWidget(memoryPanel);
+        memoryTable_->setColumnCount(3);
+        memoryTable_->setHorizontalHeaderLabels({"Offset", "Block size", "State"});
+        memoryTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        memoryTable_->verticalHeader()->hide();
+        memoryTable_->setAlternatingRowColors(true);
+        memoryTable_->setShowGrid(false);
+        memoryTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        bufferRows->addWidget(memoryTable_, 1);
         connect(fits, &QComboBox::currentIndexChanged, this, [this](int index) {
             fit_ = static_cast<Fit>(index);
             buffers_.setFit(fit_);
@@ -344,22 +502,59 @@ public:
         table_->setSelectionMode(QAbstractItemView::SingleSelection);
         table_->setSelectionBehavior(QAbstractItemView::SelectRows);
         table_->setAlternatingRowColors(true);
+        table_->setWordWrap(false);
         table_->setShowGrid(false);
-        table_->verticalHeader()->setDefaultSectionSize(35);
+        table_->verticalHeader()->setDefaultSectionSize(41);
         table_->verticalHeader()->hide();
         table_->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         table_->horizontalHeader()->setSectionResizeMode(File, QHeaderView::Stretch);
         table_->horizontalHeader()->setSectionResizeMode(Timeline, QHeaderView::Stretch);
         table_->setItemDelegateForColumn(Timeline, new TimelineDelegate(table_));
-        layout->addWidget(table_, 1);
+        auto* resultsHeading = new QLabel("Batch results", this);
+        resultsHeading->setObjectName("sectionTitle");
+        auto* resultsControls = new QHBoxLayout;
+        resultsControls->addWidget(resultsHeading);
+        resultsControls->addStretch();
+        resultsControls->addWidget(replay_);
+        resultsControls->addWidget(cancel);
+        resultsControls->addWidget(clear);
+        jobsRows->addLayout(resultsControls);
+        auto* resultOptions = new QHBoxLayout;
+        resultOptions->addWidget(showEarlier_);
+        resultOptions->addStretch();
+        auto* details = new QCheckBox("Show technical columns", this);
+        resultOptions->addWidget(details);
+        jobsRows->addLayout(resultOptions);
+        auto showDetails = [this](bool visible) {
+            for (auto column : {Size, Priority, Pid, Memory})
+                table_->setColumnHidden(column, !visible);
+        };
+        connect(details, &QCheckBox::toggled, this, showDetails);
+        showDetails(false);
+
+        auto* empty = new QWidget(jobResults_);
+        empty->setProperty("panel", true);
+        empty->setAttribute(Qt::WA_StyledBackground);
+        auto* emptyLayout = new QVBoxLayout(empty);
+        auto* emptyTitle = new QLabel("No jobs yet", empty);
+        emptyTitle->setObjectName("sectionTitle");
+        auto* emptyHint = new QLabel("Add files or drop them here to start a checksum batch.", empty);
+        emptyHint->setObjectName("hint");
+        emptyLayout->addStretch();
+        emptyLayout->addWidget(emptyTitle, 0, Qt::AlignHCenter);
+        emptyLayout->addWidget(emptyHint, 0, Qt::AlignHCenter);
+        emptyLayout->addStretch();
+        jobResults_->addWidget(empty);
+        jobResults_->addWidget(table_);
+        jobsRows->addWidget(jobResults_, 1);
         timelineScale_->setObjectName("hint");
-        layout->addWidget(timelineScale_);
+        jobsRows->addWidget(timelineScale_);
 
         solver_->setObjectName("solver");
         solver_->setTextFormat(Qt::PlainText);
         solver_->setWordWrap(true);
-        layout->addWidget(solver_);
-        layout->addWidget(status_);
+        bufferRows->addWidget(solver_);
+        body->addWidget(status_);
 
         connect(add, &QPushButton::clicked, this, [this] { chooseFiles(); });
         connect(policy, &QButtonGroup::idClicked, this, [this](int id) {
@@ -429,6 +624,8 @@ private:
             comparison_ = std::async(std::launch::async, comparePolicies, std::move(batch),
                                      compareSlots_->value(), memoryMiB_.load(), fit_);
             compare_->setEnabled(false);
+            comparisonTable_->setRowCount(0);
+            comparisonInfo_->setText("Running FCFS, SJF, and Priority on the same files...");
             status_->showMessage("Running FCFS, SJF and Priority on the current batch…");
         } catch (const std::exception& error) {
             status_->showMessage(QString::fromUtf8(error.what()), 7000);
@@ -443,22 +640,15 @@ private:
         try {
             showComparison(comparison_.get());
         } catch (const std::exception& error) {
+            comparisonInfo_->setText("Comparison failed. " + QString::fromUtf8(error.what()));
             status_->showMessage(QString::fromUtf8(error.what()), 7000);
         }
     }
 
     void showComparison(const std::vector<Comparison>& results) {
-        auto* dialog = new QDialog(this);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-        dialog->setWindowTitle("Measured scheduling comparison");
-        auto* layout = new QVBoxLayout(dialog);
-        auto* resultsTable = new QTableWidget(static_cast<int>(results.size()), 5, dialog);
-        resultsTable->setHorizontalHeaderLabels({"Policy", "Avg. wait", "Total elapsed", "Completed", "Dispatch order"});
-        resultsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        resultsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-        resultsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
-        resultsTable->setWordWrap(true);
-        for (int row = 0; row < resultsTable->rowCount(); ++row) {
+        comparisonInfo_->setText("Results from the last comparison. Hover over dispatch order to see the full list.");
+        comparisonTable_->setRowCount(static_cast<int>(results.size()));
+        for (int row = 0; row < comparisonTable_->rowCount(); ++row) {
             const auto& result = results[row];
             const auto origin = result.jobs.front().submitted;
             double waits = 0, elapsed = 0;
@@ -472,18 +662,12 @@ private:
             }
             const QStringList values{policyName(result.policy), duration(waits / result.jobs.size()),
                 duration(elapsed), QString("%1/%2").arg(completed).arg(static_cast<qulonglong>(result.jobs.size())),
-                order.join(" → ")};
+                order.join(" -> ")};
             for (int col = 0; col < values.size(); ++col)
-                resultsTable->setItem(row, col, new QTableWidgetItem(values[col]));
-            resultsTable->item(row, 4)->setToolTip(order.join("\n"));
+                comparisonTable_->setItem(row, col, new QTableWidgetItem(values[col]));
+            comparisonTable_->item(row, 4)->setToolTip(order.join("\n"));
         }
-        layout->addWidget(resultsTable);
-        auto* close = new QPushButton("Close", dialog);
-        connect(close, &QPushButton::clicked, dialog, &QDialog::close);
-        layout->addWidget(close, 0, Qt::AlignRight);
-        dialog->resize(850, 310);
-        dialog->show();
-        resultsTable->resizeRowsToContents();
+        comparisonTable_->resizeRowsToContents();
     }
 
     void chooseFiles() {
@@ -568,6 +752,7 @@ private:
         try {
             queue_.submit(files, priority_->value());
             showEarlier_->setChecked(false);
+            workspaces_->setCurrentIndex(0);
             status_->showMessage(QString("Queued %1 file(s). Skipped %2.")
                 .arg(static_cast<qlonglong>(files.size()))
                 .arg(static_cast<qlonglong>(paths.size()) - static_cast<qlonglong>(files.size())), 5500);
@@ -577,15 +762,19 @@ private:
         }
     }
 
-    QTableWidgetItem* cell(int row, int column, const QString& value) {
-        auto* item = table_->item(row, column);
+    QTableWidgetItem* cell(QTableWidget* table, int row, int column, const QString& value) {
+        auto* item = table->item(row, column);
         if (!item) {
             item = new QTableWidgetItem;
-            table_->setItem(row, column, item);
+            table->setItem(row, column, item);
         }
         if (item->text() != value)
             item->setText(value);
         return item;
+    }
+
+    QTableWidgetItem* cell(int row, int column, const QString& value) {
+        return cell(table_, row, column, value);
     }
 
     void refresh() {
@@ -605,19 +794,27 @@ private:
                                                 [](const Job& job) { return job.state != State::Cancelled; });
         compare_->setEnabled(!busy && !comparison_.valid() && availableJobs > 0 && availableJobs <= 100);
         const auto pool = buffers_.stats();
+        poolMap_->setBlocks(pool.blocks);
+        memoryTable_->setRowCount(static_cast<int>(pool.blocks.size()));
         QStringList blocks;
-        for (const auto& block : pool.blocks)
+        for (int row = 0; row < memoryTable_->rowCount(); ++row) {
+            const auto& block = pool.blocks[row];
             blocks.append(QString("%1–%2 KiB %3")
                 .arg(static_cast<double>(block.offset) / 1024, 0, 'f', 1)
                 .arg(static_cast<double>(block.offset + block.size) / 1024, 0, 'f', 1)
                 .arg(block.used ? "used" : "free"));
-        poolInfo_->setText(QString("Buffer pool: %1 KiB free · largest free %2 KiB · peak used %3 KiB\n"
-                                   "Fragmentation %4% · peak %5% · coalesces %6\n%7")
+            cell(memoryTable_, row, 0, QString("%1 B").arg(static_cast<qulonglong>(block.offset)));
+            cell(memoryTable_, row, 1, QString("%1 B").arg(static_cast<qulonglong>(block.size)));
+            cell(memoryTable_, row, 2, block.used ? "In use" : "Free");
+        }
+        poolMap_->setToolTip(blocks.join("\n"));
+        poolInfo_->setText(QString("%1 KiB free · %2 KiB largest free block · %3 KiB peak used\n"
+                                   "%4% fragmented · %5% peak fragmentation · %6 coalesces · Teal: in use")
             .arg(static_cast<double>(pool.free) / 1024, 0, 'f', 1)
             .arg(static_cast<double>(pool.largest) / 1024, 0, 'f', 1)
             .arg(static_cast<double>(pool.peak) / 1024, 0, 'f', 1)
             .arg(pool.fragmentation, 0, 'f', 1).arg(pool.peakFragmentation, 0, 'f', 1)
-            .arg(static_cast<qulonglong>(pool.merges)).arg(blocks.join(" | ")));
+            .arg(static_cast<qulonglong>(pool.merges)));
         const bool hasPrevious = previous != current;
         const bool viewingPrevious = hasPrevious && showEarlier_->isChecked();
         showEarlier_->setEnabled(hasPrevious);
@@ -641,6 +838,8 @@ private:
         const auto* selected = table_->item(table_->currentRow(), File);
         const auto selectedId = selected ? selected->data(JobId).toULongLong() : 0;
         table_->setRowCount(static_cast<int>(snapshot.jobs.size()));
+        jobResults_->setCurrentIndex(snapshot.jobs.empty() ? 0 : 1);
+        timelineScale_->setVisible(!snapshot.jobs.empty());
         int selectedRow = -1;
         int completed = 0;
         int queued = 0;
@@ -664,9 +863,28 @@ private:
             }
             if (job.state == State::Queued)
                 ++queued;
-            state->setForeground(QColor(job.state == State::Failed ? "#a33242" :
-                job.state == State::Completed ? "#116152" :
-                job.state == State::Queued ? "#80500f" : "#244759"));
+            switch (job.state) {
+                case State::Queued:
+                    state->setForeground(QColor("#7c470b"));
+                    state->setBackground(QColor("#fff1d2"));
+                    break;
+                case State::Running:
+                    state->setForeground(QColor("#2453a3"));
+                    state->setBackground(QColor("#e5eeff"));
+                    break;
+                case State::Completed:
+                    state->setForeground(QColor("#12624a"));
+                    state->setBackground(QColor("#dcf7ed"));
+                    break;
+                case State::Failed:
+                    state->setForeground(QColor("#a22449"));
+                    state->setBackground(QColor("#fde7ef"));
+                    break;
+                case State::Cancelled:
+                    state->setForeground(QColor("#57536f"));
+                    state->setBackground(QColor("#efedf6"));
+                    break;
+            }
             cell(row, Size, job.estimatedBytes
                 ? QString::number(static_cast<qulonglong>(*job.estimatedBytes)) : QString());
             cell(row, Priority, QString::number(job.priority));
@@ -693,14 +911,13 @@ private:
         }
         if (selectedId && selectedRow != table_->currentRow())
             table_->setCurrentCell(selectedRow, selectedRow < 0 ? -1 : File);
-        auto summary = QString("%1 queued     %2 completed     %3/%4 slots active     Peak %5     %6 workers")
-            .arg(queued).arg(completed).arg(snapshot.running).arg(snapshot.slots)
-            .arg(snapshot.peak).arg(snapshot.workers);
-        if (completed > 0)
-            summary += QString("     Avg wait %1     Avg run %2")
-                .arg(duration(waitTotal / completed), duration(runTotal / completed));
-        summary_->setText(summary);
-        timelineScale_->setText(QString("%1 timeline: 0 to %2  |  Amber: queued  |  Green: processing")
+        queuedMetric_->setText(QString::number(queued));
+        completedMetric_->setText(QString::number(completed));
+        slotsMetric_->setText(QString("%1 / %2").arg(snapshot.running).arg(snapshot.slots));
+        slotsMetric_->setToolTip(QString("%1 workers · peak %2 active slots").arg(snapshot.workers).arg(snapshot.peak));
+        waitMetric_->setText(completed ? duration(waitTotal / completed) : QString("—"));
+        waitMetric_->setToolTip(completed ? "Average run: " + duration(runTotal / completed) : QString());
+        timelineScale_->setText(QString("%1 timeline: 0 to %2  ·  Amber: queued  ·  Teal: processing")
             .arg(viewingPrevious ? "Previous batch" : "Current batch", duration(span)));
         auto solverText = QString("Deadlock solver: wait-for graph cycle detection  |  Recovery: reject the request that closes the cycle  |  Detected: %1")
             .arg(static_cast<qulonglong>(snapshot.deadlocks.count));

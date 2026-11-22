@@ -24,7 +24,7 @@ sh run.sh
 3. After the batch finishes, choose **SJF** or **Priority** and click **Rerun batch**. For a Priority comparison, first submit groups with different priorities. `0` is highest.
 4. Use **Show previous batch** to compare dispatch order, the timeline, and average wait. SJF estimates job length from file size.
 
-Use **Compare all policies** to run the same batch under all three schedulers. The desktop buffer panel shows the file-streaming pool, fragmentation, and coalescing.
+Open **Compare policies** to run the same batch under all three schedulers. Use **Memory** to inspect the file-streaming pool, fragmentation, and coalescing.
 
 See the [BuildQueue Live documentation](live/README.md) for the browser and CLI, the deadlock detector, and how to run the tests.
 
